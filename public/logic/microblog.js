@@ -9,20 +9,56 @@ $(document).ready(function() {
 
       } else if (this.readyState === 4 && this.status === 404) {
 
-        document.getElementById("loginStatus").innerHTML =
+        document.getElementById("status").innerHTML =
           'username o password non validi!';
 
       }
     };
 
-    var username = $('#loginUsername');
-    var password = $('#loginPassword');
+    var username = $('#username');
+    var password = $('#password');
     var user = {
       username: username.val(),
       password: password.val()
     };
 
     var address = "/microblog/login";
+    xhttp.open("POST", address, true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(user));
+
+  });
+  $('#signInButton').on('click', function() {
+
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(response) {
+      if (this.readyState === 4 && this.status === 201) {
+
+        location.assign('/microblog/login');
+
+      } else if (this.readyState === 4 && this.status === 404) {
+
+        document.getElementById("status").innerHTML =
+          'username o password non validi!';
+
+      }
+    };
+    var name = $('#name');
+    var surname = $('#surname');
+    var email = $('#email');
+    var dateOfBirth = $('#dateOfBirth');
+    var username = $('#username');
+    var password = $('#password');
+    var user = {
+      name: name.val(),
+      surname: surname.val(),
+      email: email.val(),
+      dateOfBirth: dateOfBirth.val(),
+      username: username.val(),
+      password: password.val()
+    };
+
+    var address = "/microblog/signin";
     xhttp.open("POST", address, true);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify(user));
