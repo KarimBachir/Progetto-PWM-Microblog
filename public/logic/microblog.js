@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  //login
   $('#loginButton').on('click', function() {
 
     xhttp = new XMLHttpRequest();
@@ -23,11 +24,12 @@ $(document).ready(function() {
     };
 
     var address = "/microblog/login";
-    xhttp.open("POST", address, true);
+    xhttp.open("POST", address);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify(user));
 
   });
+  //registrazione
   $('#signInButton').on('click', function() {
 
     xhttp = new XMLHttpRequest();
@@ -59,10 +61,31 @@ $(document).ready(function() {
     };
 
     var address = "/microblog/signin";
-    xhttp.open("POST", address, true);
+    xhttp.open("POST", address);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify(user));
 
+  });
+  //nuovo post
+  $('#postButton').on('click', function() {
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(response) {
+      if (this.readyState === 4 && this.status === 201) {
+        location.reload();
+      }
+    };
+
+    var title = $('#title');
+    var text = $('#text');
+    var newPost = {
+      title: title.val(),
+      text: text.val()
+    };
+
+    var address = "/microblog/posts";
+    xhttp.open("POST", address);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(newPost));
   });
 });
 

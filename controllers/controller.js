@@ -13,7 +13,7 @@ var posts = [{
   author: 'admin',
   title: 'Ho fame',
   text: 'Ho molta fame, cosa mi consigliate di mangiare?',
-  date: '17/08/2021',
+  date: '19/8/2021, 16:12:21',
   likes: 34,
   comments: [{
     author: 'admin',
@@ -22,14 +22,14 @@ var posts = [{
   }, {
     author: 'admin',
     text: 'mi sa di no...',
-    date: '17/08/2021'
+    date: '19/8/2021, 16:12:21'
   }]
 }, {
   id: 2,
   author: 'admin',
   title: 'Ho sete',
   text: 'Ho molta sete, cosa mi consigliate di bere?',
-  date: '15/08/2021',
+  date: '19/8/2021, 16:12:21',
   likes: 16,
   comments: [{
     author: 'admin',
@@ -38,7 +38,7 @@ var posts = [{
   }, {
     author: 'admin',
     text: 'mi sa di no...',
-    date: '17/08/2021'
+    date: '19/8/2021, 16:12:21'
   }]
 }]
 
@@ -46,9 +46,6 @@ module.exports = function(app) {
 
   app.get('/microblog', function(req, res) {
     res.render('index');
-  });
-  app.get('/users', function(req, res) {
-    res.send(users);
   });
 
   app.get('/microblog/login', function(req, res) {
@@ -135,6 +132,30 @@ module.exports = function(app) {
     users.push(newUser);
 
     res.cookie('sessionId', id).sendStatus(201);
+
+  });
+
+  app.post('/microblog/posts', function(req, res) {
+    var newPostId = posts.length + 1;
+    var newPostTitle = req.body.title;
+    var newPostText = req.body.text;
+    var newPostAuthor = users.find(user => user.id.toString() === req.cookies.sessionId);
+    var newPostAuthorUsername = newPostAuthor.username;
+    const date = new Date();
+    var newPostFormattedDate = date.toLocaleString();
+    var newPost = {
+      id: newPostId,
+      author: newPostAuthorUsername,
+      title: newPostTitle,
+      text: newPostText,
+      date: newPostFormattedDate,
+      likes: 0,
+      comments: []
+    };
+    console.log(newPost);
+    posts.push(newPost);
+
+    res.status(201).send(newPost);
 
   });
 
