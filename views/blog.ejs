@@ -45,13 +45,20 @@
         </div>
         <div class="post-item post-iconbar-container">
           <div class="post-iconbar-item">
-            <a><img class="like" src="http://127.0.0.1:3000/public/img/like.png" alt="like"></a>
+            <% if(posts[i].likes.find(user => user === username) != undefined){ %>
+            <img class="like" src="http://127.0.0.1:3000/public/img/liked.png" alt="already liked">
+            <% } else{ %>
+            <img class="like" src="http://127.0.0.1:3000/public/img/like.png" alt="click to like">
+            <% } %>
+            <p hidden class="postid"><%= posts[i].id %></p>
           </div>
           <div class="post-iconbar-item">
-            <span> <%= posts[i].likes %> </span>
+            <span> <%= posts[i].likes.length %> </span>
           </div>
           <div class="post-iconbar-item">
-            <a><img class="comment" src="http://127.0.0.1:3000/public/img/comment.png" alt="comment"></a>
+
+            <img class="comment" src="http://127.0.0.1:3000/public/img/comment.png" alt="comment">
+
           </div>
         </div>
       </div>

@@ -7,6 +7,14 @@ var users = [{
   dateOfBirth: 'none',
   username: 'admin',
   password: 'admin'
+}, {
+  id: 2,
+  name: 'jellylama',
+  surname: 'jellylama',
+  email: 'jellylama@jellylama.com',
+  dateOfBirth: '28/07/2001',
+  username: 'jellylama',
+  password: 'jellylama'
 }];
 var posts = [{
   id: 1,
@@ -14,7 +22,7 @@ var posts = [{
   title: 'Ho fame',
   text: 'Ho molta fame, cosa mi consigliate di mangiare?',
   date: '19/8/2021, 16:12:21',
-  likes: 34,
+  likes: ['admin', 'jellylama'],
   comments: [{
     author: 'admin',
     text: 'nessuno risponde?',
@@ -30,7 +38,7 @@ var posts = [{
   title: 'Ho sete',
   text: 'Ho molta sete, cosa mi consigliate di bere?',
   date: '19/8/2021, 16:12:21',
-  likes: 16,
+  likes: ['jellylama'],
   comments: [{
     author: 'admin',
     text: 'nessuno risponde?',
@@ -149,7 +157,7 @@ module.exports = function(app) {
       title: newPostTitle,
       text: newPostText,
       date: newPostFormattedDate,
-      likes: 0,
+      likes: [],
       comments: []
     };
     console.log(newPost);
