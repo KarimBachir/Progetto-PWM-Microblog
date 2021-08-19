@@ -76,10 +76,8 @@ module.exports = function(app) {
     var user = users.find(user => user.username === reqUsername && user.password === reqPassword);
 
     if (user) {
-      console.log('utente trovato');
       res.cookie('sessionId', user.id).sendStatus(200);
     } else {
-      console.log('utente non trovato');
       res.sendStatus(404);
     }
 
@@ -97,8 +95,6 @@ module.exports = function(app) {
     var sessionId = req.cookies.sessionId;
     //cerca un utente che abbia quell'id
     var user = users.find(user => user.id.toString() === sessionId);
-
-    console.log('sessionId nel cookie: ' + sessionId);
 
     if (user === undefined) {
       res.status(401).render('error', {
@@ -136,7 +132,6 @@ module.exports = function(app) {
       username: reqUsername,
       password: reqPassword
     };
-    console.log(newUser);
     users.push(newUser);
 
     res.cookie('sessionId', id).sendStatus(201);
@@ -160,10 +155,24 @@ module.exports = function(app) {
       likes: [],
       comments: []
     };
-    console.log(newPost);
     posts.push(newPost);
 
     res.status(201).send(newPost);
+
+  });
+
+  app.patch('/microblog/posts/:id/likes', function(req, res) {
+    var postId = req.params.id;
+    var post = posts.find(post => post.id.toString() === postId);
+    var username = (users.find(user => user.id.toString() === req.cookies.sessionId)).username;
+
+    if (post.likes.includes(username)) {
+      post.likes = post.likes.filter(likeUsername => likeUsername != username);
+    } else {
+      post.likes.push(username);
+    }
+
+    res.sendStatus(204);
 
   });
 

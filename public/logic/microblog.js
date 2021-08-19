@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
   //login
   $('#loginButton').on('click', function() {
 
@@ -29,6 +30,7 @@ $(document).ready(function() {
     xhttp.send(JSON.stringify(user));
 
   });
+
   //registrazione
   $('#signInButton').on('click', function() {
 
@@ -66,6 +68,7 @@ $(document).ready(function() {
     xhttp.send(JSON.stringify(user));
 
   });
+
   //nuovo post
   $('#postButton').on('click', function() {
     xhttp = new XMLHttpRequest();
@@ -86,6 +89,23 @@ $(document).ready(function() {
     xhttp.open("POST", address);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify(newPost));
+  });
+
+  //like
+  $(".post-iconbar-item").on('click', function() {
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(response) {
+      if (this.readyState === 4 && this.status === 204) {
+        location.reload();
+      }
+    };
+
+    var postid = $(this).text().replace(/\s/g, '');
+    var address = "/microblog/posts/" + postid + '/likes';
+
+    xhttp.open("PATCH", address);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send();
   });
 });
 
