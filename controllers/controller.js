@@ -1,3 +1,4 @@
+//database
 var users = [{
   id: 1,
   name: 'admin',
@@ -7,6 +8,39 @@ var users = [{
   username: 'admin',
   password: 'admin'
 }];
+var posts = [{
+  id: 1,
+  author: 'admin',
+  title: 'Ho fame',
+  text: 'Ho molta fame, cosa mi consigliate di mangiare?',
+  date: '17/08/2021',
+  likes: 34,
+  comments: [{
+    author: 'admin',
+    text: 'nessuno risponde?',
+    date: '17/08/2021'
+  }, {
+    author: 'admin',
+    text: 'mi sa di no...',
+    date: '17/08/2021'
+  }]
+}, {
+  id: 2,
+  author: 'admin',
+  title: 'Ho sete',
+  text: 'Ho molta sete, cosa mi consigliate di bere?',
+  date: '15/08/2021',
+  likes: 16,
+  comments: [{
+    author: 'admin',
+    text: 'nessuno risponde?',
+    date: '17/08/2021'
+  }, {
+    author: 'admin',
+    text: 'mi sa di no...',
+    date: '17/08/2021'
+  }]
+}]
 
 module.exports = function(app) {
 
@@ -68,7 +102,8 @@ module.exports = function(app) {
       });
     } else {
       res.status(200).render('blog', {
-        username: user.username
+        username: user.username,
+        posts: posts
       });
     }
   });

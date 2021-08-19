@@ -64,5 +64,17 @@ $(document).ready(function() {
     xhttp.send(JSON.stringify(user));
 
   });
-
 });
+
+function openNav() {
+  document.getElementById("myNav").style.height = "100%";
+  //fa in modo che non si veda la scrollbar mentre si apre la tendina
+  setTimeout(function() {
+    document.getElementById("myNav").style.overflow = "auto"
+  }, 500);
+}
+
+function closeNav() {
+  document.getElementById("myNav").style.overflow = "hidden";
+  document.getElementById("myNav").style.height = "0%";
+}

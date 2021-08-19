@@ -4,18 +4,59 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Microblog</title>
 
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="/public/logic/microblog.js"></script>
+    <link rel="stylesheet" type="text/css" href="/public/style/blog.css" />
 
   </head>
 
   <body>
     <a href="/microblog/logout">Logout</a>
-    <h1>Ciao <%= username %> e benvenuto nel blog!</h1>
-  </body>
+    <span onclick="openNav()">&#9776; open</span>
 
+    <!-- sezione a comparsa/scomparsa-->
+    <div id="myNav" class="overlay">
+      <a class="closebtn" onclick="closeNav()">&times;</a>
+      <!-- post form -->
+      <div id="post-form-container">
+        <h1>Pubblica un post:</h1>
+        <label for="title">Titolo</label>
+        <input type="text" id="title" name="title" placeholder="">
+        <label for="text">testo</label>
+        <textarea id="text" name="text" rows="5" cols="100"></textarea>
+        <button type="submit" id="postButton">Pubblica</button>
+      </div>
+    </div>
+
+    <h1>Ciao <%= username %> e benvenuto nel blog!</h1>
+
+    <div id="posts">
+      <% for(var i = 0; i < posts.length; i++){ %>
+      <div class="post-container">
+        <div class="post-item post">
+          <h2><%= posts[i].title %></h2>
+          <p><%= posts[i].text %></p>
+          <div class="post-footer-container">
+            <div class="post-footer-item author"><%= posts[i].author %></div>
+            <div class="post-footer-item date"><%= posts[i].date %></div>
+          </div>
+        </div>
+        <div class="post-item post-iconbar-container">
+          <div class="post-iconbar-item">
+            <a><img class="like" src="http://127.0.0.1:3000/public/img/like.png" alt="like"></a>
+          </div>
+          <div class="post-iconbar-item">
+            <span> <%= posts[i].likes %> </span>
+          </div>
+          <div class="post-iconbar-item">
+            <a><img class="comment" src="http://127.0.0.1:3000/public/img/comment.png" alt="comment"></a>
+          </div>
+        </div>
+      </div>
+      <% } %>
+    </div>
+  </body>
 
 </html>
