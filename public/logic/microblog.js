@@ -92,16 +92,28 @@ $(document).ready(function() {
   });
 
   //like
-  $(".post-iconbar-item").on('click', function() {
+  $(".like").on('click', function() {
+    var postId = $(this).attr('id');
+    var address = "/microblog/posts/" + postId + '/likes';
+
     xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function(response) {
+      var likeImgElement = document.getElementById(postId);
+      var likeCounterElement = document.getElementById('counter' + postId);
+
       if (this.readyState === 4 && this.status === 204) {
-        location.reload();
+        //se toglie il like
+        if (likeImgElement.getAttribute('src') === '/public/img/liked.png') {
+          likeImgElement.setAttribute('src', '/public/img/like.png');
+          likeCounterElement.innerHTML--;
+        }
+        //se mette il like
+        else {
+          likeImgElement.setAttribute('src', '/public/img/liked.png');
+          likeCounterElement.innerHTML++;
+        }
       }
     };
-
-    var postid = $(this).text().replace(/\s/g, '');
-    var address = "/microblog/posts/" + postid + '/likes';
 
     xhttp.open("PATCH", address);
     xhttp.setRequestHeader("Content-type", "application/json");
@@ -109,6 +121,7 @@ $(document).ready(function() {
   });
 });
 
+//apre il form per creare un post
 function openNav() {
   document.getElementById("myNav").style.height = "100%";
   //fa in modo che non si veda la scrollbar mentre si apre la tendina
@@ -116,7 +129,7 @@ function openNav() {
     document.getElementById("myNav").style.overflow = "auto"
   }, 500);
 }
-
+//chiude il form per creare un post
 function closeNav() {
   document.getElementById("myNav").style.overflow = "hidden";
   document.getElementById("myNav").style.height = "0%";

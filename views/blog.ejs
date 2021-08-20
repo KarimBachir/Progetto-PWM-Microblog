@@ -33,8 +33,9 @@
     <h1>Ciao <%= username %> e benvenuto nel blog!</h1>
 
     <div id="posts">
-      <% for(var i = 0; i < posts.length; i++){ %>
+      <% for(var i = posts.length - 1; i >= 0; i--){ %>
       <div class="post-container">
+        <!-- post -->
         <div class="post-item post">
           <h2><%= posts[i].title %></h2>
           <p><%= posts[i].text %></p>
@@ -43,21 +44,31 @@
             <div class="post-footer-item date"><%= posts[i].date %></div>
           </div>
         </div>
+        <!-- sidebar con icone likes commenti -->
         <div class="post-item post-iconbar-container">
-          <div class="post-iconbar-item">
-            <% if(posts[i].likes.find(user => user === username) != undefined){ %>
-            <img class="like" src="http://127.0.0.1:3000/public/img/liked.png" alt="already liked">
-            <% } else{ %>
-            <img class="like" src="http://127.0.0.1:3000/public/img/like.png" alt="click to like">
-            <% } %>
-            <p hidden class="postid"><%= posts[i].id %></p>
-          </div>
-          <div class="post-iconbar-item">
-            <span> <%= posts[i].likes.length %> </span>
-          </div>
+          <!-- icona like e id post nascosto -->
           <div class="post-iconbar-item">
 
-            <img class="comment" src="http://127.0.0.1:3000/public/img/comment.png" alt="comment">
+            <% if(posts[i].likes.find(user => user === username) != undefined){ %>
+            <img class="like post-interaction-img" id="<%= posts[i].id %>" src="/public/img/liked.png" alt="already liked">
+            <% } else{ %>
+            <img class="like post-interaction-img" id="<%= posts[i].id %>" src="/public/img/like.png" alt="click to like">
+            <% } %>
+
+          </div>
+          <!-- numero di like -->
+          <div class="post-iconbar-item counter" id="counter<%= posts[i].id %>"><%= posts[i].likes.length %>
+          </div>
+          <!-- icona commenti -->
+          <div class="post-iconbar-item">
+
+            <img class="comment post-interaction-img" src="http://127.0.0.1:3000/public/img/comment.png" alt="comment">
+
+          </div>
+          <!-- numero di commenti -->
+          <div class="post-iconbar-item counter">
+
+            <span> <%= posts[i].comments.length %> </span>
 
           </div>
         </div>

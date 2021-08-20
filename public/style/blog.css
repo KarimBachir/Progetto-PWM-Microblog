@@ -53,19 +53,6 @@ input, textarea, button {
   padding: 0% 20% 20% 20%;
 }
 
-.post {
-  border: 2px solid rgb(0, 78, 121);
-  border-right-style: none;
-  background-color: white;
-  padding: 5px 20px 20px 20px;
-  word-wrap: break-word;
-}
-
-.post>p {
-  max-height: 300px;
-  overflow: auto;
-}
-
 .post-container {
   display: grid;
   width: auto;
@@ -77,6 +64,19 @@ input, textarea, button {
   border-radius: 5px;
 }
 
+.post {
+  border: 2px solid rgb(0, 78, 121);
+  border-right-style: none;
+  background-color: white;
+  padding: 5px 20px 10px 20px;
+  word-wrap: break-word;
+}
+
+.post>p {
+  max-height: 300px;
+  overflow: auto;
+}
+
 .post-footer-container {
   display: grid;
   grid-template-columns: auto auto;
@@ -84,7 +84,15 @@ input, textarea, button {
 
 .post-footer-item {
   font-weight: bold;
-  font-size: 13px;
+  font-size: 11px;
+}
+
+.author {
+  text-align: left;
+}
+
+.date {
+  text-align: right;
 }
 
 .post-iconbar-container {
@@ -105,25 +113,17 @@ input, textarea, button {
   align-items: left;
 }
 
-.post-iconbar-item:hover {
-  background-color: #cbcbcb;
-  transition: all 0.3s ease;
+.counter {
+  font-weight: bold;
 }
 
-.like {
-  height: 50px;
-  width: auto;
+.post-interaction-img {
+  height: auto;
+  width: 50px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
 }
 
-.comment {
-  height: 50px;
-  width: auto;
-}
-
-.author {
-  text-align: left;
-}
-
-.date {
-  text-align: right;
+.post-interaction-img:hover {
+  transform: scale(1.07);
 }

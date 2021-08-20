@@ -26,7 +26,7 @@ var posts = [{
   comments: [{
     author: 'admin',
     text: 'nessuno risponde?',
-    date: '17/08/2021'
+    date: '19/8/2021, 16:12:21'
   }, {
     author: 'admin',
     text: 'mi sa di no...',
@@ -42,7 +42,7 @@ var posts = [{
   comments: [{
     author: 'admin',
     text: 'nessuno risponde?',
-    date: '17/08/2021'
+    date: '19/8/2021, 16:12:21'
   }, {
     author: 'admin',
     text: 'mi sa di no...',
