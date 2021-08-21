@@ -1,5 +1,4 @@
 $(document).ready(function() {
-
   //login
   $('#loginButton').on('click', function() {
 
@@ -79,7 +78,7 @@ $(document).ready(function() {
     };
 
     var title = $('#title');
-    var text = $('#text');
+    var text = $('#newPostText');
     var newPost = {
       title: title.val(),
       text: text.val()
@@ -92,7 +91,7 @@ $(document).ready(function() {
   });
 
   //like
-  $(".like").on('click', function() {
+  $(".likeImg").on('click', function() {
     var postId = $(this).attr('id');
     var address = "/microblog/posts/" + postId + '/likes';
 
@@ -119,18 +118,30 @@ $(document).ready(function() {
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send();
   });
+  $(".commentImg").on('click', function() {
+    document.getElementById("commentsSection").style.padding = "50px";
+    document.getElementById("commentsSection").style.paddingBottom = "100px";
+    document.getElementById("commentsSection").style.height = "100%";
+  });
 });
 
 //apre il form per creare un post
-function openNav() {
-  document.getElementById("myNav").style.height = "100%";
+function openNewPostSection() {
+  document.getElementById("newPostSection").style.padding = "50px";
+  document.getElementById("newPostSection").style.height = "100%";
   //fa in modo che non si veda la scrollbar mentre si apre la tendina
   setTimeout(function() {
-    document.getElementById("myNav").style.overflow = "auto"
+    document.getElementById("newPostSection").style.overflow = "overlay"
   }, 500);
 }
 //chiude il form per creare un post
-function closeNav() {
-  document.getElementById("myNav").style.overflow = "hidden";
-  document.getElementById("myNav").style.height = "0%";
+function closeNewPostSection() {
+  document.getElementById("newPostSection").style.overflow = "hidden";
+  document.getElementById("newPostSection").style.height = "0%";
+  document.getElementById("newPostSection").style.padding = "";
+}
+
+function closeCommentsSection() {
+  document.getElementById("commentsSection").style.height = "0%";
+  document.getElementById("commentsSection").style.padding = "";
 }

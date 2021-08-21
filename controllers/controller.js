@@ -138,6 +138,7 @@ module.exports = function(app) {
 
   });
 
+  //riceve un nuovo post, lo inserisce nel db e lo invia al client
   app.post('/microblog/posts', function(req, res) {
     var newPostId = posts.length + 1;
     var newPostTitle = req.body.title;
@@ -161,6 +162,7 @@ module.exports = function(app) {
 
   });
 
+  //aggiunge o toglie un like
   app.patch('/microblog/posts/:id/likes', function(req, res) {
     var postId = req.params.id;
     var post = posts.find(post => post.id.toString() === postId);

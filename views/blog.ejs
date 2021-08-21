@@ -14,19 +14,34 @@
 
   <body>
     <a href="/microblog/logout">Logout</a>
-    <span onclick="openNav()">&#9776; open</span>
-
+    <span onclick="openNewPostSection()">&#9776; open</span>
     <!-- sezione a comparsa/scomparsa-->
-    <div id="myNav" class="overlay">
-      <a class="closebtn" onclick="closeNav()">&times;</a>
+    <div id="newPostSection">
+      <a class="closebtn" onclick="closeNewPostSection()">&times;</a>
       <!-- post form -->
       <div id="post-form-container">
         <h1>Pubblica un post:</h1>
         <label for="title">Titolo</label>
-        <input type="text" id="title" name="title" placeholder="">
-        <label for="text">testo</label>
-        <textarea id="text" name="text" rows="5" cols="100"></textarea>
+        <input type="text" id="title" name="title">
+        <label for="newPostText">testo</label>
+        <textarea id="newPostText" name="newPostText" rows="5"></textarea>
         <button type="submit" id="postButton">Pubblica</button>
+      </div>
+    </div>
+    <!-- sezione a comparsa/scomparsa-->
+    <div id="commentsSection">
+      <a class="closebtn" onclick="closeCommentsSection()">&times;</a>
+      <!-- comment form -->
+      <div id="comments-section-container">
+        <div id="commentForm">
+          <label for="commentText">Commenta:</label>
+          <textarea id="commentText" name="commentText" rows="2"></textarea>
+          <button type="submit" id="commentButton">Pubblica</button>
+        </div>
+        <hr>
+        <div id="comments">
+          <iframe src="/public/provacommenti.html" title="comments"></iframe>
+        </div>
       </div>
     </div>
 
@@ -50,19 +65,20 @@
           <div class="post-iconbar-item">
 
             <% if(posts[i].likes.find(user => user === username) != undefined){ %>
-            <img class="like post-interaction-img" id="<%= posts[i].id %>" src="/public/img/liked.png" alt="already liked">
+            <img class="likeImg post-interaction-img" id="<%= posts[i].id %>" src="/public/img/liked.png" alt="already liked">
             <% } else{ %>
-            <img class="like post-interaction-img" id="<%= posts[i].id %>" src="/public/img/like.png" alt="click to like">
+            <img class="likeImg post-interaction-img" id="<%= posts[i].id %>" src="/public/img/like.png" alt="click to like">
             <% } %>
 
           </div>
           <!-- numero di like -->
-          <div class="post-iconbar-item counter" id="counter<%= posts[i].id %>"><%= posts[i].likes.length %>
+          <div class="post-iconbar-item counter" id="counter<%= posts[i].id %>">
+            <%= posts[i].likes.length %>
           </div>
           <!-- icona commenti -->
           <div class="post-iconbar-item">
 
-            <img class="comment post-interaction-img" src="http://127.0.0.1:3000/public/img/comment.png" alt="comment">
+            <img class="commentImg post-interaction-img" src="http://127.0.0.1:3000/public/img/comment.png" alt="comment">
 
           </div>
           <!-- numero di commenti -->
