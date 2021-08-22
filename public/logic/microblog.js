@@ -119,29 +119,44 @@ $(document).ready(function() {
     xhttp.send();
   });
   $(".commentImg").on('click', function() {
-    document.getElementById("commentsSection").style.padding = "50px";
-    document.getElementById("commentsSection").style.paddingBottom = "100px";
+    document.body.style.overflow = "hidden";
+    for (var i = 0; i < document.getElementsByClassName("fullscreenSection").length; i++) {
+      var offset = window.pageYOffset;
+      var bb = document.getElementsByClassName("fullscreenSection")[i].style.top + offset;
+      document.getElementsByClassName("fullscreenSection")[i].style.top = offset + "px";
+    };
     document.getElementById("commentsSection").style.height = "100%";
+    setTimeout(function() {
+      document.getElementById("commentsSection").style.overflow = "overlay"
+    }, 500);
   });
 });
 
 //apre il form per creare un post
 function openNewPostSection() {
-  document.getElementById("newPostSection").style.padding = "50px";
+  document.body.style.overflow = "hidden";
   document.getElementById("newPostSection").style.height = "100%";
   //fa in modo che non si veda la scrollbar mentre si apre la tendina
   setTimeout(function() {
     document.getElementById("newPostSection").style.overflow = "overlay"
   }, 500);
 }
-//chiude il form per creare un post
-function closeNewPostSection() {
-  document.getElementById("newPostSection").style.overflow = "hidden";
-  document.getElementById("newPostSection").style.height = "0%";
-  document.getElementById("newPostSection").style.padding = "";
-}
 
 function closeCommentsSection() {
   document.getElementById("commentsSection").style.height = "0%";
-  document.getElementById("commentsSection").style.padding = "";
+  document.getElementById("commentsSection").style.overflow = "hidden";
+  setTimeout(function() {
+    document.body.style.overflow = "overlay";
+  }, 500);
+  for (var i = 0; i < document.getElementsByClassName("fullscreenSection").length; i++) {
+    document.getElementsByClassName("fullscreenSection")[i].style.top = "0";
+  };
+}
+//chiude il form per creare un post
+function closeNewPostSection() {
+  document.getElementById("newPostSection").style.height = "0%";
+  document.getElementById("newPostSection").style.overflow = "hidden"
+  setTimeout(function() {
+    document.body.style.overflow = "overlay";
+  }, 500);
 }

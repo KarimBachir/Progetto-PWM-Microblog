@@ -48,6 +48,54 @@ var posts = [{
     text: 'mi sa di no...',
     date: '19/8/2021, 16:12:21'
   }]
+}, {
+  id: 3,
+  author: 'admin',
+  title: 'Ho sete',
+  text: 'Ho molta sete, cosa mi consigliate di bere?',
+  date: '19/8/2021, 16:12:21',
+  likes: ['jellylama'],
+  comments: [{
+    author: 'admin',
+    text: 'nessuno risponde?',
+    date: '19/8/2021, 16:12:21'
+  }, {
+    author: 'admin',
+    text: 'mi sa di no...',
+    date: '19/8/2021, 16:12:21'
+  }]
+}, {
+  id: 4,
+  author: 'admin',
+  title: 'Ho sete',
+  text: 'Ho molta sete, cosa mi consigliate di bere?',
+  date: '19/8/2021, 16:12:21',
+  likes: ['jellylama'],
+  comments: [{
+    author: 'admin',
+    text: 'nessuno risponde?',
+    date: '19/8/2021, 16:12:21'
+  }, {
+    author: 'admin',
+    text: 'mi sa di no...',
+    date: '19/8/2021, 16:12:21'
+  }]
+}, {
+  id: 5,
+  author: 'admin',
+  title: 'Ho sete',
+  text: 'Ho molta sete, cosa mi consigliate di bere?',
+  date: '19/8/2021, 16:12:21',
+  likes: ['jellylama'],
+  comments: [{
+    author: 'admin',
+    text: 'nessuno risponde?',
+    date: '19/8/2021, 16:12:21'
+  }, {
+    author: 'admin',
+    text: 'mi sa di no...',
+    date: '19/8/2021, 16:12:21'
+  }]
 }]
 
 module.exports = function(app) {
