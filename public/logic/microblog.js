@@ -1,9 +1,9 @@
-$(document).ready(function() {
+$(document).ready(function () {
   //login
-  $('#loginButton').on('click', function() {
+  $('#loginButton').on('click', function () {
 
     xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function(response) {
+    xhttp.onreadystatechange = function (response) {
       if (this.readyState === 4 && this.status === 200) {
 
         location.assign('/microblog/blog');
@@ -31,10 +31,10 @@ $(document).ready(function() {
   });
 
   //registrazione
-  $('#signInButton').on('click', function() {
+  $('#signInButton').on('click', function () {
 
     xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function(response) {
+    xhttp.onreadystatechange = function (response) {
       if (this.readyState === 4 && this.status === 201) {
 
         location.assign('/microblog/login');
@@ -69,9 +69,9 @@ $(document).ready(function() {
   });
 
   //nuovo post
-  $('#postButton').on('click', function() {
+  $('#postButton').on('click', function () {
     xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function(response) {
+    xhttp.onreadystatechange = function (response) {
       if (this.readyState === 4 && this.status === 201) {
         location.reload();
       }
@@ -91,14 +91,14 @@ $(document).ready(function() {
   });
 
   //like
-  $(".likeImg").on('click', function() {
+  $(".likeImg").on('click', function () {
     var postId = $(this).parent().parent().attr('id');
     var likeImgElement = $(this);
     var address = "/microblog/posts/" + postId + '/likes';
     var likeCounterElement = document.getElementById('likeCounter' + postId);
 
     xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function(response) {
+    xhttp.onreadystatechange = function (response) {
 
       if (this.readyState === 4 && this.status === 204) {
         //se toglie il like
@@ -119,11 +119,33 @@ $(document).ready(function() {
     xhttp.send();
   });
 
+  //nuovo commento
+  $('#newCommentButton').on('click', function () {
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function (response) {
+      if (this.readyState === 4 && this.status === 201) {
+        var iframe = document.getElementById('commentsIframe');
+        iframe.src = iframe.src;
+      }
+    };
+
+    var text = $('#newCommentText');
+    var newComment = {
+      text: text.val()
+    };
+    var postId = document.getElementById('newCommentPostId').getAttribute('value');
+    var address = "/microblog/posts/" + postId + "/comments";
+    xhttp.open("POST", address);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(newComment));
+  });
+
   //apre la sezione commenti del post
-  $(".commentImg").on('click', function() {
+  $(".commentImg").on('click', function () {
     var postId = $(this).parent().parent().attr('id');
 
     document.getElementById('commentsIframe').setAttribute('src', "/microblog/posts/" + postId + '/comments');
+    document.getElementById('newCommentPostId').setAttribute('value', postId);
 
     document.body.style.overflow = "hidden";
     for (var i = 0; i < document.getElementsByClassName("fullscreenSection").length; i++) {
@@ -132,7 +154,7 @@ $(document).ready(function() {
       document.getElementsByClassName("fullscreenSection")[i].style.top = offset + "px";
     };
     document.getElementById("commentsSection").style.height = "100%";
-    setTimeout(function() {
+    setTimeout(function () {
       document.getElementById("commentsSection").style.overflow = "overlay"
     }, 500);
   });
@@ -143,7 +165,7 @@ function openNewPostSection() {
   document.body.style.overflow = "hidden";
   document.getElementById("newPostSection").style.height = "100%";
   //fa in modo che non si veda la scrollbar mentre si apre la tendina
-  setTimeout(function() {
+  setTimeout(function () {
     document.getElementById("newPostSection").style.overflow = "overlay"
   }, 500);
 }
@@ -151,7 +173,7 @@ function openNewPostSection() {
 function closeCommentsSection() {
   document.getElementById("commentsSection").style.height = "0%";
   document.getElementById("commentsSection").style.overflow = "hidden";
-  setTimeout(function() {
+  setTimeout(function () {
     document.body.style.overflow = "overlay";
   }, 500);
   for (var i = 0; i < document.getElementsByClassName("fullscreenSection").length; i++) {
@@ -162,7 +184,7 @@ function closeCommentsSection() {
 function closeNewPostSection() {
   document.getElementById("newPostSection").style.height = "0%";
   document.getElementById("newPostSection").style.overflow = "hidden"
-  setTimeout(function() {
+  setTimeout(function () {
     document.body.style.overflow = "overlay";
   }, 500);
 }

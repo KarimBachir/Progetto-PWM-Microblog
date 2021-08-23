@@ -98,13 +98,13 @@ var posts = [{
   }]
 }]
 
-module.exports = function(app) {
+module.exports = function (app) {
 
-  app.get('/microblog', function(req, res) {
+  app.get('/microblog', function (req, res) {
     res.render('index');
   });
 
-  app.get('/microblog/login', function(req, res) {
+  app.get('/microblog/login', function (req, res) {
     var sessionId = req.cookies.sessionId;
     var user = users.find(user => user.id.toString() === sessionId);
 
@@ -118,7 +118,7 @@ module.exports = function(app) {
 
   });
 
-  app.post('/microblog/login', function(req, res) {
+  app.post('/microblog/login', function (req, res) {
     var reqUsername = req.body.username;
     var reqPassword = req.body.password;
     var user = users.find(user => user.username === reqUsername && user.password === reqPassword);
@@ -131,7 +131,7 @@ module.exports = function(app) {
 
   });
 
-  app.get('/microblog/logout', function(req, res) {
+  app.get('/microblog/logout', function (req, res) {
     res.clearCookie('sessionId');
     res.render('login', {
       status: ''
@@ -139,7 +139,7 @@ module.exports = function(app) {
 
   });
 
-  app.get('/microblog/blog', function(req, res) {
+  app.get('/microblog/blog', function (req, res) {
     var sessionId = req.cookies.sessionId;
     //cerca un utente che abbia quell'id
     var user = users.find(user => user.id.toString() === sessionId);
@@ -157,13 +157,13 @@ module.exports = function(app) {
     }
   });
 
-  app.get('/microblog/signin', function(req, res) {
+  app.get('/microblog/signin', function (req, res) {
     res.render('signin', {
       status: ''
     });
   });
 
-  app.post('/microblog/signin', function(req, res) {
+  app.post('/microblog/signin', function (req, res) {
     var reqName = req.body.name;
     var reqSurname = req.body.surname;
     var reqEmail = req.body.email;
@@ -187,7 +187,7 @@ module.exports = function(app) {
   });
 
   //riceve un nuovo post, lo inserisce nel db e lo invia al client
-  app.post('/microblog/posts', function(req, res) {
+  app.post('/microblog/posts', function (req, res) {
     var newPostId = posts.length + 1;
     var newPostTitle = req.body.title;
     var newPostText = req.body.text;
@@ -211,7 +211,7 @@ module.exports = function(app) {
   });
 
   //aggiunge o toglie un like
-  app.patch('/microblog/posts/:id/likes', function(req, res) {
+  app.patch('/microblog/posts/:id/likes', function (req, res) {
     var postId = req.params.id;
     var post = posts.find(post => post.id.toString() === postId);
     var username = (users.find(user => user.id.toString() === req.cookies.sessionId)).username;
@@ -226,8 +226,30 @@ module.exports = function(app) {
 
   });
 
+  //aggiunge un nuovo commento relativo ad un post dato il suo id
+  app.post('/microblog/posts/:id/comments', function (req, res) {
+    var postId = req.params.id;
+    var post = posts.find(post => post.id.toString() === postId);
+
+    var newCommentAuthor = users.find(user => user.id.toString() === req.cookies.sessionId);
+    var newCommentAuthorUsername = newCommentAuthor.username;
+    var newCommentText = req.body.text;
+    const date = new Date();
+    var newCommentDate = date.toLocaleString();
+    var newComment = {
+      author: newCommentAuthorUsername,
+      text: newCommentText,
+      date: newCommentDate
+    };
+
+    post.comments.push(newComment);
+
+    res.status(201).send(newComment);
+
+  });
+
   //restituisce la pagina con i commenti di un post dato il suo id
-  app.get('/microblog/posts/:id/comments', function(req, res) {
+  app.get('/microblog/posts/:id/comments', function (req, res) {
     var postId = req.params.id;
     var post = posts.find(post => post.id.toString() === postId);
     var comments = post.comments;
