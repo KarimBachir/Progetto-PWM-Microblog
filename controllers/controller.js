@@ -226,4 +226,16 @@ module.exports = function(app) {
 
   });
 
+  //restituisce la pagina con i commenti di un post dato il suo id
+  app.get('/microblog/posts/:id/comments', function(req, res) {
+    var postId = req.params.id;
+    var post = posts.find(post => post.id.toString() === postId);
+    var comments = post.comments;
+
+    res.render('comments', {
+      comments: comments
+    });
+
+  });
+
 };

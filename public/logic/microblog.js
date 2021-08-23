@@ -92,23 +92,23 @@ $(document).ready(function() {
 
   //like
   $(".likeImg").on('click', function() {
-    var postId = $(this).attr('id');
+    var postId = $(this).parent().parent().attr('id');
+    var likeImgElement = $(this);
     var address = "/microblog/posts/" + postId + '/likes';
+    var likeCounterElement = document.getElementById('likeCounter' + postId);
 
     xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function(response) {
-      var likeImgElement = document.getElementById(postId);
-      var likeCounterElement = document.getElementById('counter' + postId);
 
       if (this.readyState === 4 && this.status === 204) {
         //se toglie il like
-        if (likeImgElement.getAttribute('src') === '/public/img/liked.png') {
-          likeImgElement.setAttribute('src', '/public/img/like.png');
+        if (likeImgElement.attr('src') === '/public/img/liked.png') {
+          likeImgElement.attr('src', '/public/img/like.png');
           likeCounterElement.innerHTML--;
         }
         //se mette il like
         else {
-          likeImgElement.setAttribute('src', '/public/img/liked.png');
+          likeImgElement.attr('src', '/public/img/liked.png');
           likeCounterElement.innerHTML++;
         }
       }
@@ -118,7 +118,13 @@ $(document).ready(function() {
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send();
   });
+
+  //apre la sezione commenti del post
   $(".commentImg").on('click', function() {
+    var postId = $(this).parent().parent().attr('id');
+
+    document.getElementById('commentsIframe').setAttribute('src', "/microblog/posts/" + postId + '/comments');
+
     document.body.style.overflow = "hidden";
     for (var i = 0; i < document.getElementsByClassName("fullscreenSection").length; i++) {
       var offset = window.pageYOffset;
