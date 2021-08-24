@@ -124,21 +124,12 @@ $(document).ready(function() {
     xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function(response) {
       if (this.readyState === 4 && this.status === 201) {
-        var jsonResponse = JSON.parse(response.srcElement.response);
         var iframe = document.getElementById('commentsIframe');
         var comments = iframe.contentWindow.document.getElementById('comments');
         var postId = document.getElementById('newCommentPostId').getAttribute('value');
-        comments.innerHTML = "<div class=\"comment-container\">" +
-          "<div class=\"comment-item commentAuthor\">" +
-          jsonResponse.author +
-          "</div>" +
-          "<div class=\"comment-item commentText\">" +
-          jsonResponse.text +
-          "</div>" +
-          "<div class=\"comment-item commentDate\">" +
-          jsonResponse.date +
-          "</div>" +
-          "</div>" + iframe.contentWindow.document.getElementById('comments').innerHTML;
+        var newCommentHTML = response.srcElement.response;
+        comments.innerHTML = newCommentHTML + iframe.contentWindow.document.getElementById('comments').innerHTML;
+
         document.getElementById('commentCounter' + postId).innerHTML++;
       }
     };
@@ -162,8 +153,8 @@ $(document).ready(function() {
     document.getElementById('newCommentPostId').setAttribute('value', postId);
 
     document.body.style.overflow = "hidden";
+    var offset = window.pageYOffset;
     for (var i = 0; i < document.getElementsByClassName("fullscreenSection").length; i++) {
-      var offset = window.pageYOffset;
       var bb = document.getElementsByClassName("fullscreenSection")[i].style.top + offset;
       document.getElementsByClassName("fullscreenSection")[i].style.top = offset + "px";
     };

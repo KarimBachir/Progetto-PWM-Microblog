@@ -244,7 +244,18 @@ module.exports = function(app) {
 
     post.comments.push(newComment);
 
-    res.status(201).json(newComment);
+    res.set('Content-Type', 'text/plain');
+    res.status(201).send("<div class=\"comment-container\">" +
+      "<div class=\"comment-item commentAuthor\">" +
+      newCommentAuthorUsername +
+      "</div>" +
+      "<div class=\"comment-item commentText\">" +
+      newCommentText +
+      "</div>" +
+      "<div class=\"comment-item commentDate\">" +
+      newCommentDate +
+      "</div>" +
+      "</div>");
 
   });
 
