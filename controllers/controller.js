@@ -95,6 +95,38 @@ var posts = [{
     author: 'admin',
     text: 'mi sa di no...',
     date: '19/8/2021, 16:12:21'
+  }, {
+    author: 'admin',
+    text: 'nessuno risponde?',
+    date: '19/8/2021, 16:12:21'
+  }, {
+    author: 'admin',
+    text: 'mi sa di no...',
+    date: '19/8/2021, 16:12:21'
+  }, {
+    author: 'admin',
+    text: 'nessuno risponde?',
+    date: '19/8/2021, 16:12:21'
+  }, {
+    author: 'admin',
+    text: 'mi sa di no...',
+    date: '19/8/2021, 16:12:21'
+  }, {
+    author: 'admin',
+    text: 'nessuno risponde?',
+    date: '19/8/2021, 16:12:21'
+  }, {
+    author: 'admin',
+    text: 'mi sa di no...',
+    date: '19/8/2021, 16:12:21'
+  }, {
+    author: 'admin',
+    text: 'nessuno risponde?',
+    date: '19/8/2021, 16:12:21'
+  }, {
+    author: 'admin',
+    text: 'mi sa di no...',
+    date: '19/8/2021, 16:12:21'
   }]
 }]
 
@@ -102,6 +134,15 @@ module.exports = function(app) {
 
   app.get('/microblog', function(req, res) {
     res.render('index');
+  });
+
+  app.get('/microblog/guest', function(req, res) {
+    res.clearCookie('sessionId');
+    res.status(200).render('blog', {
+      username: 'Guest',
+      posts: posts
+    });
+
   });
 
   app.get('/microblog/login', function(req, res) {
@@ -188,74 +229,85 @@ module.exports = function(app) {
 
   //riceve un nuovo post, lo inserisce nel db e lo invia al client
   app.post('/microblog/posts', function(req, res) {
-    var newPostId = posts.length + 1;
-    var newPostTitle = req.body.title;
-    var newPostText = req.body.text;
     var newPostAuthor = users.find(user => user.id.toString() === req.cookies.sessionId);
-    var newPostAuthorUsername = newPostAuthor.username;
-    const date = new Date();
-    var newPostFormattedDate = date.toLocaleString();
-    var newPost = {
-      id: newPostId,
-      author: newPostAuthorUsername,
-      title: newPostTitle,
-      text: newPostText,
-      date: newPostFormattedDate,
-      likes: [],
-      comments: []
-    };
-    posts.push(newPost);
+    if (newPostAuthor === undefined) {
+      res.sendStatus(401);
+    } else {
 
-    res.status(201).send(newPost);
-
+      var newPostAuthorUsername = newPostAuthor.username;
+      var newPostId = posts.length + 1;
+      var newPostTitle = req.body.title;
+      var newPostText = req.body.text;
+      const date = new Date();
+      var newPostFormattedDate = date.toLocaleString();
+      var newPost = {
+        id: newPostId,
+        author: newPostAuthorUsername,
+        title: newPostTitle,
+        text: newPostText,
+        date: newPostFormattedDate,
+        likes: [],
+        comments: []
+      };
+      posts.push(newPost);
+      res.status(201).send(newPost);
+    }
   });
 
   //aggiunge o toglie un like
   app.patch('/microblog/posts/:id/likes', function(req, res) {
-    var postId = req.params.id;
-    var post = posts.find(post => post.id.toString() === postId);
-    var username = (users.find(user => user.id.toString() === req.cookies.sessionId)).username;
-
-    if (post.likes.includes(username)) {
-      post.likes = post.likes.filter(likeUsername => likeUsername != username);
+    var user = users.find(user => user.id.toString() === req.cookies.sessionId);
+    if (user === undefined) {
+      res.sendStatus(401);
     } else {
-      post.likes.push(username);
+      var username = user.username;
+      var postId = req.params.id;
+      var post = posts.find(post => post.id.toString() === postId);
+
+      if (post.likes.includes(username)) {
+        post.likes = post.likes.filter(likeUsername => likeUsername != username);
+      } else {
+        post.likes.push(username);
+      }
+
+      res.sendStatus(204);
     }
-
-    res.sendStatus(204);
-
   });
 
   //aggiunge un nuovo commento relativo ad un post dato il suo id
   app.post('/microblog/posts/:id/comments', function(req, res) {
-    var postId = req.params.id;
-    var post = posts.find(post => post.id.toString() === postId);
-
     var newCommentAuthor = users.find(user => user.id.toString() === req.cookies.sessionId);
-    var newCommentAuthorUsername = newCommentAuthor.username;
-    var newCommentText = req.body.text;
-    const date = new Date();
-    var newCommentDate = date.toLocaleString();
-    var newComment = {
-      author: newCommentAuthorUsername,
-      text: newCommentText,
-      date: newCommentDate
-    };
+    if (newCommentAuthor === undefined) {
+      res.sendStatus(401);
+    } else {
+      var postId = req.params.id;
+      var post = posts.find(post => post.id.toString() === postId);
 
-    post.comments.push(newComment);
+      var newCommentAuthorUsername = newCommentAuthor.username;
+      var newCommentText = req.body.text;
+      const date = new Date();
+      var newCommentDate = date.toLocaleString();
+      var newComment = {
+        author: newCommentAuthorUsername,
+        text: newCommentText,
+        date: newCommentDate
+      };
 
-    res.set('Content-Type', 'text/plain');
-    res.status(201).send("<div class=\"comment-container\">" +
-      "<div class=\"comment-item commentAuthor\">" +
-      newCommentAuthorUsername +
-      "</div>" +
-      "<div class=\"comment-item commentText\">" +
-      newCommentText +
-      "</div>" +
-      "<div class=\"comment-item commentDate\">" +
-      newCommentDate +
-      "</div>" +
-      "</div>");
+      post.comments.push(newComment);
+
+      res.set('Content-Type', 'text/plain');
+      res.status(201).send("<div class=\"comment-container\">" +
+        "<div class=\"comment-item commentAuthor\">" +
+        newCommentAuthorUsername +
+        "</div>" +
+        "<div class=\"comment-item commentText\">" +
+        newCommentText +
+        "</div>" +
+        "<div class=\"comment-item commentDate\">" +
+        newCommentDate +
+        "</div>" +
+        "</div>");
+    }
 
   });
 
