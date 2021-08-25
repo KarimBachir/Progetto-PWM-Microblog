@@ -1,0 +1,36 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial;
+  background: #f1f1f1;
+  margin: 0;
+}
+
+a {
+  font-size: 20px;
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.footer {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: rgb(108, 126, 214);
+  border: 5px solid rgb(0, 78, 121);
+  text-align: center;
+}
+
+.footer h5 {
+  margin: 5px 10px 5px 10px;
+}

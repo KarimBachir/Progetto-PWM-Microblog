@@ -1,24 +1,37 @@
 <!DOCTYPE html>
 <html lang="it">
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Microblog</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Microblog</title>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" type="text/css" href="/public/style/index.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+</head>
 
-    </script>
-  </head>
-
-  <body>
-    <h1>Benvenuto nel microblog di Karim Bachir!</h1>
-    <p>Se ti registrerai avrai la possibilità di pubblicare post, commentare e mettere like ai post che ti piaceranno.</p>
-    <p>Se invece deciderai di non registrarti avrai comunque la possibilità di visualizzare i post degli utenti registrati ma non potrai crearne di nuovi e non potrai commentare o mettere like.</p>
-    <p>Scegli cosa fare:</p>
-    <p><a href="/microblog/login">Accedi</a></p>
-    <p><a href="/microblog/signin">Registrati</a></p>
-    <p><a href="/microblog/guest">Accedi come guest</a></p>
-  </body>
+<body>
+  <h1>Benvenuto nel microblog di Karim Bachir!</h1>
+  <p>Scegli cosa fare:</p>
+  <ul>
+    <li>
+      <a href="/microblog/login">Accedi <i class="bi bi-door-open-fill"></i></a>
+    </li>
+    <li>
+      <a href="/microblog/signin">Registrati <i class="bi bi-person-plus-fill"></i></a>
+    </li>
+    <li>
+      <a href="/microblog/guest">Accedi come guest <i class="bi bi-person"></i></a>
+    </li>
+  </ul>
+  <p>Se ti registrerai avrai la possibilità di pubblicare post, commentare e mettere like ai post che ti piaceranno.</p>
+  <p>Se invece deciderai di non registrarti avrai comunque la possibilità di visualizzare i post degli utenti registrati e i relativi commenti ma non potrai crearne di nuovi e non potrai commentare o mettere like.</p>
+  <div class="footer">
+    <h5>PWM Microblog</h5>
+    <h5>2020/2021</h5>
+    <h5>Karim Bachir</h5>
+  </div>
+</body>
 
 </html>
