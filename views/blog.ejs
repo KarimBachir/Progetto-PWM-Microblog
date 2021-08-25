@@ -38,6 +38,7 @@
         <button type="submit" id="postButton">Pubblica</button>
       </div>
     </div>
+
     <!-- sezione dei commenti a comparsa/scomparsa -->
     <div class="fullscreenSection" id="commentsSection">
       <a class="closebtn" onclick="closeCommentsSection()">&times;</a>
@@ -53,11 +54,16 @@
       </div>
     </div>
 
-    <a href="/microblog/logout">Logout</a>
-    <span onclick="openNewPostSection()">&#9776; open</span>
-    <h1>Ciao <%= username %> e benvenuto nel blog!</h1>
 
-    <div id="posts">
+    <div id="navBar">
+      <a href="/microblog/logout">Logout</a>
+      <span onclick="openNewPostSection()">&#9776; open</span>
+    </div>
+
+    <div id="blog">
+      <div id="header">
+        <h1>Ciao <%= username %> e benvenuto nel blog!</h1>
+      </div>
       <% for(var i = posts.length - 1; i >= 0; i--){ %>
       <div class="post-container">
         <!-- post -->
