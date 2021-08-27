@@ -133,7 +133,9 @@ var posts = [{
 module.exports = function(app) {
 
   app.get('/microblog', function(req, res) {
-    res.render('index');
+    res.render('index', {
+      status: ''
+    });
   });
 
   app.get('/microblog/guest', function(req, res) {
@@ -174,10 +176,7 @@ module.exports = function(app) {
 
   app.get('/microblog/logout', function(req, res) {
     res.clearCookie('sessionId');
-    res.render('login', {
-      status: ''
-    });
-
+    res.status(200).redirect('/microblog');
   });
 
   app.get('/microblog/blog', function(req, res) {

@@ -1,82 +1,11 @@
-var setBodyOF = true;
 $(document).ready(function() {
+  //fa vibrare il messaggio a comparsa
   $('#loginNeededSection').on('click', function() {
     $("#loginNeededContainer").effect("shake", {
       direction: "left",
       times: 2,
       distance: 10
     }, 250);
-  });
-
-
-
-  //login
-  $('#loginButton').on('click', function() {
-
-    xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function(response) {
-      if (this.readyState === 4 && this.status === 200) {
-
-        location.assign('/microblog/blog');
-
-      } else if (this.readyState === 4 && this.status === 404) {
-
-        document.getElementById("status").innerHTML =
-          'username o password non validi!';
-
-      }
-    };
-
-    var username = $('#username');
-    var password = $('#password');
-    var user = {
-      username: username.val(),
-      password: password.val()
-    };
-
-    var address = "/microblog/login";
-    xhttp.open("POST", address);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(JSON.stringify(user));
-
-  });
-
-  //registrazione
-  $('#signInButton').on('click', function() {
-
-    xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function(response) {
-      if (this.readyState === 4 && this.status === 201) {
-
-        location.assign('/microblog/login');
-
-      } else if (this.readyState === 4 && this.status === 404) {
-
-        document.getElementById("status").innerHTML =
-          'username o password non validi!';
-
-      }
-    };
-    var name = $('#name');
-    var surname = $('#surname');
-    var email = $('#email');
-    var dateOfBirth = $('#dateOfBirth');
-    var username = $('#username');
-    var password = $('#password');
-    var user = {
-      name: name.val(),
-      surname: surname.val(),
-      email: email.val(),
-      dateOfBirth: dateOfBirth.val(),
-      username: username.val(),
-      password: password.val()
-    };
-
-    var address = "/microblog/signin";
-    xhttp.open("POST", address);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(JSON.stringify(user));
-
   });
 
   //nuovo post
