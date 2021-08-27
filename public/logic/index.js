@@ -42,7 +42,7 @@ $(document).ready(function() {
     xhttp.onreadystatechange = function(response) {
       if (this.readyState === 4 && this.status === 201) {
 
-        location.assign('/microblog/login');
+        location.assign('/microblog/blog');
 
       } else if (this.readyState === 4 && this.status === 404) {
 
@@ -92,12 +92,10 @@ function checkPage2Content() {
 async function triggerLoginForm() {
   if ($("#page1").css('width') === $(window).width() + 'px') {
     setPage1Width('50%');
-    await sleep(900);
-  } else if ($("#page1").css('width') === $(window).width() / 2 + 'px') {
-
+    await sleep(600);
   }
-  $("#signin").fadeOut('500', function() {
-    $("#login").fadeToggle('500', function() {
+  $("#signin").fadeOut('fast', function() {
+    $("#login").fadeToggle('fast', function() {
       checkPage2Content()
     });
   });
@@ -106,13 +104,10 @@ async function triggerLoginForm() {
 async function triggerSigninForm() {
   if ($("#page1").css('width') === $(window).width() + 'px') {
     setPage1Width('50%');
-    await sleep(900);
-  } else if ($("#page1").css('width') === $(window).width() / 2 + 'px') {
-
+    await sleep(600);
   }
-  setPage1Width('50%');
-  $("#login").fadeOut('500', function() {
-    $("#signin").fadeToggle('500', function() {
+  $("#login").fadeOut('fast', function() {
+    $("#signin").fadeToggle('fast', function() {
       checkPage2Content()
     });
   });

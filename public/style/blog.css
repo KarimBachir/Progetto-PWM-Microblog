@@ -1,14 +1,3 @@
-* {
-  box-sizing: border-box;
-}
-
-body {
-  font-family: Arial;
-  background: #f1f1f1;
-  margin: 0;
-  overflow: hidden;
-}
-
 #header {
   text-align: center;
 }
@@ -70,27 +59,15 @@ input, textarea {
   margin-bottom: 10px;
 }
 
-button {
-  display: block;
-  border-radius: 5px;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: rgb(255, 255, 255);
-}
-
 /* tutto il resto lo eredita da .fullscreenSection */
 #loginNeededSection {
-  z-index: 3;
+  z-index: 4;
   background-color: rgba(0, 0, 0, 0.5);
   height: 0;
   transition: none;
 }
 
 #loginNeededContainer {
-  font-weight: bold;
   background-color: #ffffff;
   margin: 20px auto auto auto;
   padding: 5px;
@@ -100,26 +77,14 @@ button:hover {
 }
 
 #loginNeededContainer p {
+  font-weight: bold;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-#closeSectionButton {
-  color: #aaaaaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-#closeSectionButton:hover {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-}
-
 .fullscreenSection {
   position: fixed;
-  z-index: 2;
+  z-index: 3;
   top: 0;
   left: 0;
   width: 100%;
@@ -199,12 +164,9 @@ iframe {
   top: 1%;
   right: 45px;
   font-size: 60px;
+  font-weight: bold;
   color: red;
   transition: all 0.15s ease;
-}
-
-.closebtn:hover {
-  transform: scale(1.07);
 }
 
 .post-container {
@@ -279,23 +241,6 @@ iframe {
   cursor: pointer;
 }
 
-.post-interaction-img:hover {
-  transform: scale(1.07);
-}
-
-.footer {
-  z-index: 1;
-  position: fixed;
-  display: grid;
-  grid-template-columns: auto auto auto;
-  bottom: 0;
-  width: 100%;
-  height: 4%;
-  background-color: rgb(108, 126, 214);
-  border: 5px solid rgb(0, 78, 121);
-  text-align: center;
-}
-
-.footer h5 {
-  margin: 5px 10px 5px 10px;
+.post-interaction-img:hover, .closebtn:hover {
+  transform: scale(1.10);
 }

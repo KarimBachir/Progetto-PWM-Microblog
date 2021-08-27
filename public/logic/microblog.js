@@ -32,7 +32,7 @@ $(document).ready(function() {
     xhttp.send(JSON.stringify(newPost));
   });
 
-  $("#closeSectionButton").on('click', function() {
+  $("#closeLoginNeededSectionButton").on('click', function() {
     document.getElementById("loginNeededSection").style.height = "0%";
   });
 

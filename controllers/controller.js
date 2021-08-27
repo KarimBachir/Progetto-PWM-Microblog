@@ -144,21 +144,6 @@ module.exports = function(app) {
       username: 'Guest',
       posts: posts
     });
-
-  });
-
-  app.get('/microblog/login', function(req, res) {
-    var sessionId = req.cookies.sessionId;
-    var user = users.find(user => user.id.toString() === sessionId);
-
-    if (user === undefined) {
-      res.render('login', {
-        status: ''
-      });
-    } else {
-      res.status(200).redirect('/microblog/blog');
-    }
-
   });
 
   app.post('/microblog/login', function(req, res) {
@@ -171,7 +156,6 @@ module.exports = function(app) {
     } else {
       res.sendStatus(404);
     }
-
   });
 
   app.get('/microblog/logout', function(req, res) {
@@ -195,12 +179,6 @@ module.exports = function(app) {
         posts: posts
       });
     }
-  });
-
-  app.get('/microblog/signin', function(req, res) {
-    res.render('signin', {
-      status: ''
-    });
   });
 
   app.post('/microblog/signin', function(req, res) {
@@ -230,7 +208,10 @@ module.exports = function(app) {
   app.post('/microblog/posts', function(req, res) {
     var newPostAuthor = users.find(user => user.id.toString() === req.cookies.sessionId);
     if (newPostAuthor === undefined) {
-      res.sendStatus(401);
+      res.status(401).render('error', {
+        statusCode: '401',
+        message: "Devi effettuare l'accesso per accedere a questa pagina!"
+      });
     } else {
 
       var newPostAuthorUsername = newPostAuthor.username;
@@ -257,7 +238,10 @@ module.exports = function(app) {
   app.patch('/microblog/posts/:id/likes', function(req, res) {
     var user = users.find(user => user.id.toString() === req.cookies.sessionId);
     if (user === undefined) {
-      res.sendStatus(401);
+      res.status(401).render('error', {
+        statusCode: '401',
+        message: "Devi effettuare l'accesso per accedere a questa pagina!"
+      });
     } else {
       var username = user.username;
       var postId = req.params.id;
@@ -277,7 +261,10 @@ module.exports = function(app) {
   app.post('/microblog/posts/:id/comments', function(req, res) {
     var newCommentAuthor = users.find(user => user.id.toString() === req.cookies.sessionId);
     if (newCommentAuthor === undefined) {
-      res.sendStatus(401);
+      res.status(401).render('error', {
+        statusCode: '401',
+        message: "Devi effettuare l'accesso per accedere a questa pagina!"
+      });
     } else {
       var postId = req.params.id;
       var post = posts.find(post => post.id.toString() === postId);
