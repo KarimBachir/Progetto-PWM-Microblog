@@ -163,24 +163,6 @@ module.exports = function(app) {
     res.status(200).redirect('/microblog');
   });
 
-  app.get('/microblog/blog', function(req, res) {
-    var sessionId = req.cookies.sessionId;
-    //cerca un utente che abbia quell'id
-    var user = users.find(user => user.id.toString() === sessionId);
-
-    if (user === undefined) {
-      res.status(401).render('error', {
-        statusCode: '401',
-        message: "Devi effettuare l'accesso per accedere a questa pagina!"
-      });
-    } else {
-      res.status(200).render('blog', {
-        username: user.username,
-        posts: posts
-      });
-    }
-  });
-
   app.post('/microblog/signin', function(req, res) {
     var reqName = req.body.name;
     var reqSurname = req.body.surname;
@@ -202,6 +184,24 @@ module.exports = function(app) {
 
     res.cookie('sessionId', id).sendStatus(201);
 
+  });
+
+  app.get('/microblog/blog', function(req, res) {
+    var sessionId = req.cookies.sessionId;
+    //cerca un utente che abbia quell'id
+    var user = users.find(user => user.id.toString() === sessionId);
+
+    if (user === undefined) {
+      res.status(401).render('error', {
+        statusCode: '401',
+        message: "Devi effettuare l'accesso per accedere a questa pagina!"
+      });
+    } else {
+      res.status(200).render('blog', {
+        username: user.username,
+        posts: posts
+      });
+    }
   });
 
   //riceve un nuovo post, lo inserisce nel db e lo invia al client
@@ -257,6 +257,18 @@ module.exports = function(app) {
     }
   });
 
+  //restituisce la pagina con i commenti di un post dato il suo id
+  app.get('/microblog/posts/:id/comments', function(req, res) {
+    var postId = req.params.id;
+    var post = posts.find(post => post.id.toString() === postId);
+    var comments = post.comments;
+
+    res.render('comments', {
+      comments: comments
+    });
+
+  });
+
   //aggiunge un nuovo commento relativo ad un post dato il suo id
   app.post('/microblog/posts/:id/comments', function(req, res) {
     var newCommentAuthor = users.find(user => user.id.toString() === req.cookies.sessionId);
@@ -294,19 +306,6 @@ module.exports = function(app) {
         "</div>" +
         "</div>");
     }
-
-  });
-
-  //restituisce la pagina con i commenti di un post dato il suo id
-  app.get('/microblog/posts/:id/comments', function(req, res) {
-    var postId = req.params.id;
-    var post = posts.find(post => post.id.toString() === postId);
-    var comments = post.comments;
-
-    res.render('comments', {
-      comments: comments
-    });
-
   });
 
 };

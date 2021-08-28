@@ -1,39 +1,77 @@
 $(document).ready(function() {
-  //fa vibrare il messaggio a comparsa
-  $('#loginNeededSection').on('click', function() {
-    $("#loginNeededContainer").effect("shake", {
-      direction: "left",
-      times: 2,
-      distance: 10
-    }, 250);
+
+  //login
+  $('#loginButton').on('click', function() {
+
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(response) {
+      if (this.readyState === 4 && this.status === 200) {
+
+        location.assign('/microblog/blog');
+
+      } else if (this.readyState === 4 && this.status === 404) {
+
+        document.getElementById("status").innerHTML =
+          'username o password non validi!';
+        $("#status").effect("shake", {
+          direction: "left",
+          times: 2,
+          distance: 10
+        }, 250);
+
+      }
+    };
+
+    var username = $('#loginUsername');
+    var password = $('#loginPassword');
+    var user = {
+      username: username.val(),
+      password: password.val()
+    };
+
+    var address = "/microblog/login";
+    xhttp.open("POST", address);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(user));
+
   });
 
-  //nuovo post
-  $('#postButton').on('click', function() {
+  //registrazione
+  $('#signInButton').on('click', function() {
+
     xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function(response) {
       if (this.readyState === 4 && this.status === 201) {
-        location.reload();
-      } else if (this.readyState === 4 && this.status === 401) {
-        document.getElementById("loginNeededSection").style.height = "100%";
-      };
+
+        location.assign('/microblog/blog');
+
+      } else if (this.readyState === 4 && this.status === 404) {
+
+        document.getElementById("status").innerHTML =
+          'username o password non validi!';
+
+      }
+    };
+    var name = $('#name');
+    var surname = $('#surname');
+    var email = $('#email');
+    var dateOfBirth = $('#dateOfBirth');
+    var username = $('#signinUsername');
+    var password = $('#signinPassword');
+    var user = {
+      name: name.val(),
+      surname: surname.val(),
+      email: email.val(),
+      dateOfBirth: dateOfBirth.val(),
+      username: username.val(),
+      password: password.val()
     };
 
-    var title = $('#title');
-    var text = $('#newPostText');
-    var newPost = {
-      title: title.val(),
-      text: text.val()
-    };
-
-    var address = "/microblog/posts";
+    var address = "/microblog/signin";
     xhttp.open("POST", address);
     xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(JSON.stringify(newPost));
-  });
+    xhttp.send(JSON.stringify(user));
 
-  $("#closeLoginNeededSectionButton").on('click', function() {
-    document.getElementById("loginNeededSection").style.height = "0%";
   });
 
   //like
@@ -67,6 +105,30 @@ $(document).ready(function() {
     xhttp.send();
   });
 
+  //nuovo post
+  $('#postButton').on('click', function() {
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(response) {
+      if (this.readyState === 4 && this.status === 201) {
+        location.reload();
+      } else if (this.readyState === 4 && this.status === 401) {
+        document.getElementById("loginNeededSection").style.height = "100%";
+      };
+    };
+
+    var title = $('#title');
+    var text = $('#newPostText');
+    var newPost = {
+      title: title.val(),
+      text: text.val()
+    };
+
+    var address = "/microblog/posts";
+    xhttp.open("POST", address);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(newPost));
+  });
+
   //nuovo commento
   $('#newCommentButton').on('click', function() {
     xhttp = new XMLHttpRequest();
@@ -95,38 +157,4 @@ $(document).ready(function() {
     xhttp.send(JSON.stringify(newComment));
   });
 
-  //apre la sezione commenti del post
-  $(".commentImg").on('click', function() {
-    var postId = $(this).parent().parent().attr('id');
-
-    document.getElementById('commentsIframe').setAttribute('src', "/microblog/posts/" + postId + '/comments');
-    document.getElementById('newCommentPostId').setAttribute('value', postId);
-    document.getElementById("commentsSection").style.height = "100%";
-    setTimeout(function() {
-      document.getElementById("commentsSection").style.overflow = "overlay"
-    }, 500);
-  });
 });
-
-//apre il form per creare un post
-function openNewPostSection() {
-  document.getElementById("newPostSection").style.height = "100%";
-  //fa in modo che non si veda la scrollbar mentre si apre la tendina
-  setTimeout(function() {
-    document.getElementById("newPostSection").style.overflow = "overlay"
-  }, 500);
-}
-
-function closeCommentsSection() {
-  document.getElementById("commentsSection").style.height = "0%";
-  document.getElementById("commentsSection").style.overflow = "hidden";
-
-  for (var i = 0; i < document.getElementsByClassName("fullscreenSection").length; i++) {
-    document.getElementsByClassName("fullscreenSection")[i].style.top = "0";
-  };
-}
-//chiude il form per creare un post
-function closeNewPostSection() {
-  document.getElementById("newPostSection").style.height = "0%";
-  document.getElementById("newPostSection").style.overflow = "hidden";
-}
