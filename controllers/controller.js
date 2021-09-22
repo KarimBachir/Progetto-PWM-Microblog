@@ -147,6 +147,12 @@ module.exports = function(app) {
   });
 
   function validateSignin(name, surname, email, dateOfBirth, username, password) {
+    var output = {
+      result: false,
+      text: ''
+    };
+    //almeno 3 e massimo 16 caratteri, usato per name e surname
+    let namePattern = new RegExp(/^[a-zA-Z]{3,16}$/);
     //almeno 5 e massimo 10 caratteri, numeri o simboli
     let usernamePattern = new RegExp(/^[\w#\?!@\$%\^&\*-]{5,16}$/);
     //bisogna verificare che non ci siano spazi
@@ -159,18 +165,20 @@ module.exports = function(app) {
     */
     let passwordPattern = new RegExp(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[#\?!@\$%\^&\*-]).{8,16}$/);
     let spacePattern = new RegExp(/[\s]+/);
-    if (!usernamePattern.test(username)) {
-      console.log('username sbagliato');
-      return false;
+    if (!namePattern.test(name)) {
+      output.text = "nome non idoneo, controlla i requisiti...";
+    } else if (!namePattern.test(surname)) {
+      output.text = "cognome non idoneo, controlla i requisiti...";
+    } else if (!usernamePattern.test(username)) {
+      output.text = "username non idoneo, controlla i requisiti...";
     } else if (!passwordPattern.test(password)) {
-      console.log('password sbagliata');
-      return false;
+      output.text = "password non idonea, controlla i requisiti...";
     } else if (passwordPattern.test(password) && spacePattern.test(password)) {
-      console.log('password con spazi');
-      return false;
+      output.text = "La password non deve contenere spazi!";
     } else {
-      return true;
+      output.result = true;
     }
+    return output;
   };
 
   app.post('/microblog/login', function(req, res) {
@@ -199,7 +207,8 @@ module.exports = function(app) {
     var reqUsername = req.body.username;
     var reqPassword = req.body.password;
     var id = users.length + 1;
-    if (validateSignin(reqName, reqSurname, reqEmail, reqDateOfBirth, reqUsername, reqPassword)) {
+    var validation = validateSignin(reqName, reqSurname, reqEmail, reqDateOfBirth, reqUsername, reqPassword);
+    if (validation.result) {
 
       var newUser = {
         id: id,
@@ -213,7 +222,7 @@ module.exports = function(app) {
       users.push(newUser);
       res.cookie('sessionId', id).sendStatus(201);
     } else {
-      res.sendStatus(400);
+      res.status(400).json(validation);
     }
 
   });

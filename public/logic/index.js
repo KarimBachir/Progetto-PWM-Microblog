@@ -19,33 +19,29 @@ function checkPage2Content() {
 $(document).ready(function() {
 
   //fa apparire o sparire il form di login alla pressione del tasto accedi
-  $("#triggerLoginFormButton").on('click', async function triggerLoginForm() {
+  $("#action > a").on('click', async function triggerLoginForm() {
+    $("#status").fadeOut('fast');
     //se la larghezza della sezione a sinistra della home è 100% allora la imposta a 50%
     if ($("#page1").css('width') === $(window).width() + 'px') {
       setPage1Width('50%');
       await sleep(600);
     }
-    //nasconde il form di signin e fa apparire-sparire quello di login, successivamente verifica la visibilità dei due form
-    $("#signin").fadeOut('fast', function() {
-      $("#login").fadeToggle('fast', function() {
-        checkPage2Content()
-      });
-    });
-  });
 
-  //fa apparire o sparire il form di signin alla pressione del tasto registrati
-  $("#triggerSigninFormButton").on('click', async function triggerSigninForm() {
-    //se la larghezza della sezione a sinistra della home è 100% allora la imposta a 50%
-    if ($("#page1").css('width') === $(window).width() + 'px') {
-      setPage1Width('50%');
-      await sleep(600);
-    }
-    //nasconde il form di login e fa apparire-sparire quello di signin, successivamente verifica la visibilità dei due form
-    $("#login").fadeOut('fast', function() {
-      $("#signin").fadeToggle('fast', function() {
-        checkPage2Content()
+    if (this.getAttribute('id') === 'triggerLoginFormButton') {
+      //nasconde il form di signin e fa apparire-sparire quello di login, successivamente verifica la visibilità dei due form
+      $("#signin").fadeOut('fast', function() {
+        $("#login").fadeToggle('fast', function() {
+          checkPage2Content()
+        });
       });
-    });
+    } else if (this.getAttribute('id') === 'triggerSigninFormButton') {
+      //nasconde il form di login e fa apparire-sparire quello di signin, successivamente verifica la visibilità dei due form
+      $("#login").fadeOut('fast', function() {
+        $("#signin").fadeToggle('fast', function() {
+          checkPage2Content()
+        });
+      });
+    }
   });
 
 });
