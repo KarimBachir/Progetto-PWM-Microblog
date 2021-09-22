@@ -148,7 +148,7 @@ module.exports = function(app) {
 
   function validateSignin(name, surname, email, dateOfBirth, username, password) {
     //almeno 5 e massimo 10 caratteri, numeri o simboli
-    let usernamePattern = new RegExp('/^[\w#?!@$%^&*-]{5,16}$/');
+    let usernamePattern = new RegExp(/^[\w#\?!@\$%\^&\*-]{5,16}$/);
     //bisogna verificare che non ci siano spazi
     /*
     minimo 8 e massimo 16 caratteri
@@ -157,11 +157,16 @@ module.exports = function(app) {
     almeno un numero
     almeno un simbolo tra #?!@$%^&*-
     */
-    let passwordPattern = new RegExp('/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[#?!@$%^&*-]).{8,16}$/');
-    let spacePattern = new RegExp('/[\s]+/');
-    if (!usernamePattern.test(username) || !passwordPattern.test(password)) {
+    let passwordPattern = new RegExp(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[#\?!@\$%\^&\*-]).{8,16}$/);
+    let spacePattern = new RegExp(/[\s]+/);
+    if (!usernamePattern.test(username)) {
+      console.log('username sbagliato');
+      return false;
+    } else if (!passwordPattern.test(password)) {
+      console.log('password sbagliata');
       return false;
     } else if (passwordPattern.test(password) && spacePattern.test(password)) {
+      console.log('password con spazi');
       return false;
     } else {
       return true;
@@ -206,7 +211,6 @@ module.exports = function(app) {
         password: reqPassword
       };
       users.push(newUser);
-
       res.cookie('sessionId', id).sendStatus(201);
     } else {
       res.sendStatus(400);
