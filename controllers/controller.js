@@ -146,6 +146,28 @@ module.exports = function(app) {
     });
   });
 
+  function validateSignin(name, surname, email, dateOfBirth, username, password) {
+    //almeno 5 e massimo 10 caratteri, numeri o simboli
+    let usernamePattern = new RegExp('/^[\w#?!@$%^&*-]{5,16}$/');
+    //bisogna verificare che non ci siano spazi
+    /*
+    minimo 8 e massimo 16 caratteri
+    almeno una maiuscola
+    almeno una minuscola
+    almeno un numero
+    almeno un simbolo tra #?!@$%^&*-
+    */
+    let passwordPattern = new RegExp('/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[#?!@$%^&*-]).{8,16}$/');
+    let spacePattern = new RegExp('/[\s]+/');
+    if (!usernamePattern.test(username) || !passwordPattern.test(password)) {
+      return false;
+    } else if (passwordPattern.test(password) && spacePattern.test(password)) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   app.post('/microblog/login', function(req, res) {
     var reqUsername = req.body.username;
     var reqPassword = req.body.password;
@@ -156,6 +178,7 @@ module.exports = function(app) {
     } else {
       res.sendStatus(404);
     }
+
   });
 
   app.get('/microblog/logout', function(req, res) {
@@ -171,18 +194,23 @@ module.exports = function(app) {
     var reqUsername = req.body.username;
     var reqPassword = req.body.password;
     var id = users.length + 1;
-    var newUser = {
-      id: id,
-      name: reqName,
-      surname: reqSurname,
-      email: reqEmail,
-      dateOfBirth: reqDateOfBirth,
-      username: reqUsername,
-      password: reqPassword
-    };
-    users.push(newUser);
+    if (validateSignin(reqName, reqSurname, reqEmail, reqDateOfBirth, reqUsername, reqPassword)) {
 
-    res.cookie('sessionId', id).sendStatus(201);
+      var newUser = {
+        id: id,
+        name: reqName,
+        surname: reqSurname,
+        email: reqEmail,
+        dateOfBirth: reqDateOfBirth,
+        username: reqUsername,
+        password: reqPassword
+      };
+      users.push(newUser);
+
+      res.cookie('sessionId', id).sendStatus(201);
+    } else {
+      res.sendStatus(400);
+    }
 
   });
 

@@ -12,13 +12,21 @@ $(document).ready(function() {
       } else if (this.readyState === 4 && this.status === 404) {
 
         document.getElementById("status").innerHTML =
-          'username o password non validi!';
+          'utente non trovato!';
         $("#status").effect("shake", {
           direction: "left",
           times: 2,
           distance: 10
         }, 250);
 
+      } else if (this.readyState === 4 && this.status === 400) {
+        document.getElementById("status").innerHTML =
+          'username o password non validi!';
+        $("#status").effect("shake", {
+          direction: "left",
+          times: 2,
+          distance: 10
+        }, 250);
       }
     };
 
@@ -45,10 +53,10 @@ $(document).ready(function() {
 
         location.assign('/microblog/blog');
 
-      } else if (this.readyState === 4 && this.status === 404) {
+      } else if (this.readyState === 4 && this.status === 400) {
 
         document.getElementById("status").innerHTML =
-          'username o password non validi!';
+          'dati inseriti non validi!';
 
       }
     };
