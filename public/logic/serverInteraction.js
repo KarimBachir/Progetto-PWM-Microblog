@@ -56,14 +56,15 @@ $(document).ready(function() {
     var name = $('#name');
     var surname = $('#surname');
     var email = $('#email');
-    var dateOfBirth = $('#dateOfBirth');
+    var arBirthday = $('#birthday').val().split("-");
+    var birthday = arBirthday[2] + "/" + arBirthday[1] + "/" + arBirthday[0];
     var username = $('#signinUsername');
     var password = $('#signinPassword');
     var user = {
       name: name.val(),
       surname: surname.val(),
       email: email.val(),
-      dateOfBirth: dateOfBirth.val(),
+      birthday: birthday,
       username: username.val(),
       password: password.val()
     };

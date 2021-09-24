@@ -4,7 +4,7 @@ var users = [{
   name: 'admin',
   surname: 'admin',
   email: 'admin@admin.com',
-  dateOfBirth: 'none',
+  birthday: 'none',
   username: 'admin',
   password: 'admin'
 }, {
@@ -12,7 +12,7 @@ var users = [{
   name: 'jellylama',
   surname: 'jellylama',
   email: 'jellylama@jellylama.com',
-  dateOfBirth: '28/07/2001',
+  birthday: '28/07/2001',
   username: 'jellylama',
   password: 'jellylama'
 }];
@@ -133,8 +133,10 @@ var posts = [{
 module.exports = function(app) {
 
   app.get('/microblog', function(req, res) {
+    var date = new Date();
     res.render('index', {
-      status: ''
+      status: '',
+      today: date.toISOString().substring(0, 10)
     });
   });
 
@@ -146,17 +148,21 @@ module.exports = function(app) {
     });
   });
 
-  function validateSignin(name, surname, email, dateOfBirth, username, password) {
+  function validateSignin(name, surname, email, birthday, username, password) {
     var output = {
       result: false,
       text: ''
     };
     //almeno 3 e massimo 16 caratteri, usato per name e surname
     let namePattern = new RegExp(/^[a-zA-Z]{3,16}$/);
+    //emailregex http://emailregex.com/
+    let emailPattern = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+    //formato accettato gg/mm/aaaa
+    let datePattern = new RegExp(/^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)\d\d$/);
     //almeno 5 e massimo 10 caratteri, numeri o simboli
     let usernamePattern = new RegExp(/^[\w#\?!@\$%\^&\*-]{5,16}$/);
-    //bisogna verificare che non ci siano spazi
     /*
+    -bisogna verificare che non ci siano spazi-
     minimo 8 e massimo 16 caratteri
     almeno una maiuscola
     almeno una minuscola
@@ -164,17 +170,22 @@ module.exports = function(app) {
     almeno un simbolo tra #?!@$%^&*-
     */
     let passwordPattern = new RegExp(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[#\?!@\$%\^&\*-]).{8,16}$/);
+    //uno o più spazi
     let spacePattern = new RegExp(/[\s]+/);
     if (!namePattern.test(name)) {
-      output.text = "nome non idoneo, controlla i requisiti...";
+      output.text = "nome non idoneo, verifica i requisiti...";
     } else if (!namePattern.test(surname)) {
-      output.text = "cognome non idoneo, controlla i requisiti...";
+      output.text = "cognome non idoneo, verifica i requisiti...";
+    } else if (!emailPattern.test(email)) {
+      output.text = "email non idonea, verifica i requisiti..."
+    } else if (!datePattern.test(birthday)) {
+      output.text = "data non idonea...";
     } else if (!usernamePattern.test(username)) {
-      output.text = "username non idoneo, controlla i requisiti...";
+      output.text = "username non idoneo, verifica i requisiti...";
+    } else if (spacePattern.test(password)) {
+      output.text = "la password non deve contenere spazi!";
     } else if (!passwordPattern.test(password)) {
-      output.text = "password non idonea, controlla i requisiti...";
-    } else if (passwordPattern.test(password) && spacePattern.test(password)) {
-      output.text = "La password non deve contenere spazi!";
+      output.text = "password non idonea, verifica i requisiti...";
     } else {
       output.result = true;
     }
@@ -203,11 +214,11 @@ module.exports = function(app) {
     var reqName = req.body.name;
     var reqSurname = req.body.surname;
     var reqEmail = req.body.email;
-    var reqDateOfBirth = req.body.dateOfBirth;
+    var reqBirthday = req.body.birthday;
     var reqUsername = req.body.username;
     var reqPassword = req.body.password;
     var id = users.length + 1;
-    var validation = validateSignin(reqName, reqSurname, reqEmail, reqDateOfBirth, reqUsername, reqPassword);
+    var validation = validateSignin(reqName, reqSurname, reqEmail, reqBirthday, reqUsername, reqPassword);
     if (validation.result) {
 
       var newUser = {
@@ -215,7 +226,7 @@ module.exports = function(app) {
         name: reqName,
         surname: reqSurname,
         email: reqEmail,
-        dateOfBirth: reqDateOfBirth,
+        birthday: reqBirthday,
         username: reqUsername,
         password: reqPassword
       };
