@@ -26,15 +26,19 @@
   display: none;
 }
 
-#login *, #signin * {
+#login label, #signin label {
   display: block;
 }
 
-#login label, #login input, #login button, #signin label, #signin input, #signin button {
+#login label, #login input, #login button, #signin label, #signin input, #signin button, #signin i {
   font-size: 20px;
 }
 
-#login>input, #signin .tooltip, #signin>input {
+#signin .tooltiptext {
+  font-size: initial;
+}
+
+#login input, #signin i, #signin input {
   display: inline;
   margin-right: 10px;
   margin-bottom: 10px;
@@ -49,40 +53,17 @@
 
 /* Tooltip text */
 .tooltip .tooltiptext {
-  visibility: hidden;
+  cursor: auto;
+  display: none;
   width: fit-content;
   background-color: #555;
   color: #fff;
-  text-align: center;
-  padding: 5px 0;
+  font-style: normal;
+  text-align: left;
+  padding: 10px;
   border-radius: 6px;
-  /* Position the tooltip text */
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -60px;
-  /* Fade in tooltip */
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-/* Tooltip arrow */
-.tooltip .tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
-}
-
-/* Show the tooltip text when you mouse over the tooltip container */
-.tooltip .show {
-  visibility: visible;
-  opacity: 1;
+  position: fixed;
+  margin-left: 15px;
 }
 
 #status {

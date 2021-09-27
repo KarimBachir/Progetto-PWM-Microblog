@@ -28,11 +28,12 @@
           <a href="/microblog/guest"><i class="bi bi-person"></i> Accedi come guest</a>
         </div>
         <p>Se ti registrerai avrai la possibilità di pubblicare post, commentare e mettere like ai post che ti piaceranno.</p>
-        <p>Se invece deciderai di non registrarti avrai comunque la possibilità di visualizzare i post degli utenti registrati e i relativi commenti ma non potrai crearne di nuovi e non potrai commentare o mettere like.</p>
+        <p>Se invece deciderai di non registrarti avrai comunque la possibilità di visualizzare i post degli utenti registrati e i relativi commenti ma non potrai crearne di nuovi, commentare o mettere like.</p>
       </div>
       <div id="page2">
+
         <div id="login">
-          <h3>Compila i campi:</h3>
+          <h2>Compila i campi:</h2>
           <label for="loginUsername">username</label>
           <input type="text" name="username" id="loginUsername" value="">
           <br>
@@ -41,33 +42,35 @@
           <br>
           <button type="submit" name="login" id="loginButton">Login</button>
         </div>
+
         <div id="signin">
-          <h3>Compila i campi:</h3>
+          <h2>Compila i campi:</h2>
           <label for="name">name</label>
           <input type="text" name="name" id="name" value="">
           <i class="tooltip bi bi-info-circle-fill">
-            <span class="tooltiptext">
+            <div class="tooltiptext">
               Almeno 3 e massimo 16 caratteri
-            </span>
+            </div>
           </i>
           <br>
 
           <label for="surname">surname</label>
           <input type="text" name="surname" id="surname" value="">
           <i class="tooltip bi bi-info-circle-fill">
-            <span class="tooltiptext">
+            <div class="tooltiptext">
               Almeno 3 e massimo 16 caratteri
-            </span>
+            </div>
           </i>
           <br>
 
           <label for="email">email</label>
           <input type="email" name="email" id="email" value="">
           <i class="tooltip bi bi-info-circle-fill">
-            <span class="tooltiptext">
+            <div class="tooltiptext">
               Formato: ###@###
+              <hr>
               Per maggiori informazioni: http://emailregex.com/
-            </span>
+            </div>
           </i>
           <br>
 
@@ -77,23 +80,28 @@
           <label for="signinUsername">username</label>
           <input type="text" name="username" id="signinUsername" value="">
           <i class="tooltip bi bi-info-circle-fill">
-            <span class="tooltiptext">
+            <div class="tooltiptext">
               Almeno 4 e massimo 10 caratteri, numeri o simboli (#?!@$%^&*-)
-            </span>
+            </div>
           </i>
           <br>
 
           <label for="signinPassword">password</label>
           <input type="password" name="password" id="signinPassword" value="">
           <i class="tooltip bi bi-info-circle-fill">
-            <span class="tooltiptext">
-              -Minimo 8 e massimo 16 caratteri
-              -Almeno una maiuscola
-              -Almeno una minuscola
-              -Almeno un numero
-              -Almeno un simbolo tra #?!@$%^&*-
-              -Nessuno spazio
-            </span>
+            <div class="tooltiptext">
+              Minimo 8 e massimo 16 caratteri
+              <hr>
+              Almeno una maiuscola
+              <hr>
+              Almeno una minuscola
+              <hr>
+              Almeno un numero
+              <hr>
+              Almeno un simbolo tra #?!@$%^&*-
+              <hr>
+              Nessuno spazio
+            </div>
           </i>
           <br>
 
