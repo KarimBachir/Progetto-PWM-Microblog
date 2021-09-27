@@ -131,23 +131,6 @@ var posts = [{
 }]
 
 module.exports = function(app) {
-
-  app.get('/microblog', function(req, res) {
-    var date = new Date();
-    res.render('index', {
-      status: '',
-      today: date.toISOString().substring(0, 10)
-    });
-  });
-
-  app.get('/microblog/guest', function(req, res) {
-    res.clearCookie('sessionId');
-    res.status(200).render('blog', {
-      username: 'Guest',
-      posts: posts
-    });
-  });
-
   function validateSignin(name, surname, email, birthday, username, password) {
     var output = {
       result: false,
@@ -192,6 +175,22 @@ module.exports = function(app) {
     }
     return output;
   };
+
+  app.get('/microblog', function(req, res) {
+    var date = new Date();
+    res.render('index', {
+      status: '',
+      today: date.toISOString().substring(0, 10)
+    });
+  });
+
+  app.get('/microblog/guest', function(req, res) {
+    res.clearCookie('sessionId');
+    res.status(200).render('blog', {
+      username: 'Guest',
+      posts: posts
+    });
+  });
 
   app.post('/microblog/login', function(req, res) {
     var reqUsername = req.body.username;

@@ -44,14 +44,12 @@
   margin-bottom: 10px;
 }
 
-/* Tooltip container */
 .tooltip {
   color: rgb(0, 78, 121);
   cursor: pointer;
   position: relative;
 }
 
-/* Tooltip text */
 .tooltip .tooltiptext {
   cursor: auto;
   display: none;
