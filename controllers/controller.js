@@ -178,7 +178,7 @@ module.exports = function(app) {
     } else if (!namePattern.test(surname)) {
       output.text = "cognome non idoneo, verifica i requisiti...";
     } else if (!emailPattern.test(email)) {
-      output.text = "email non idonea, verifica i requisiti..."
+      output.text = "email non idonea, verifica i requisiti...";
     } else if (!datePattern.test(birthday)) {
       output.text = "data non idonea...";
     } else if (!usernamePattern.test(username)) {
