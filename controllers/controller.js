@@ -142,17 +142,17 @@ module.exports = function(app) {
     let emailPattern = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
     //formato accettato GG/MM/AAAA
     let datePattern = new RegExp(/^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)\d\d$/);
-    //almeno 4 e massimo 10 caratteri, numeri o simboli
-    let usernamePattern = new RegExp(/^[\w#\?!@\$%\^&\*-]{4,10}$/);
+    //almeno 4 e massimo 16 caratteri, numeri o simboli
+    let usernamePattern = new RegExp(/^[\w#\?!@\$%\^&\*-]{4,16}$/);
     /*
     -bisogna verificare che non ci siano spazi-
-    minimo 8 e massimo 16 caratteri
+    minimo 8 e massimo 20 caratteri
     almeno una maiuscola
     almeno una minuscola
     almeno un numero
     almeno un simbolo tra #?!@$%^&*-
     */
-    let passwordPattern = new RegExp(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[#\?!@\$%\^&\*-]).{8,16}$/);
+    let passwordPattern = new RegExp(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[#\?!@\$%\^&\*-]).{8,20}$/);
     //uno o più spazi
     let spacePattern = new RegExp(/[\s]+/);
 
