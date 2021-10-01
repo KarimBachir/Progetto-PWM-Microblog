@@ -109,7 +109,12 @@ input, textarea {
   padding: 0 50px 15px 50px;
 }
 
-iframe {
+#comments {
+  height: 100vh;
+  overflow: overlay;
+}
+
+#commentsIframe {
   border: none;
   border-top: 4px solid rgb(0, 78, 121);
   width: 100%;

@@ -47,7 +47,6 @@
 .tooltip {
   color: rgb(0, 78, 121);
   cursor: pointer;
-  position: relative;
 }
 
 .tooltip .tooltiptext {
