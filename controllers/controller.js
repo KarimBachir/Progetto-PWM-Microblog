@@ -187,6 +187,7 @@ module.exports = function(app) {
   app.get('/microblog/guest', function(req, res) {
     res.clearCookie('sessionId');
     res.status(200).render('blog', {
+      status: '',
       username: 'Guest',
       posts: posts
     });
@@ -250,6 +251,7 @@ module.exports = function(app) {
       });
     } else {
       res.status(200).render('blog', {
+        status: '',
         username: user.username,
         posts: posts
       });
@@ -266,23 +268,44 @@ module.exports = function(app) {
       });
     } else {
 
-      var newPostAuthorUsername = newPostAuthor.username;
-      var newPostId = posts.length + 1;
       var newPostTitle = req.body.title;
       var newPostText = req.body.text;
-      const date = new Date();
-      var newPostFormattedDate = date.toLocaleString();
-      var newPost = {
-        id: newPostId,
-        author: newPostAuthorUsername,
-        title: newPostTitle,
-        text: newPostText,
-        date: newPostFormattedDate,
-        likes: [],
-        comments: []
-      };
-      posts.push(newPost);
-      res.status(201).send(newPost);
+
+      if (!newPostTitle.replace(/\s/g, '').length) {
+        document.getElementById("status").innerHTML = 'titolo vuoto o con solo spazi';
+        $("#status").fadeIn('fast');
+        $("#status").effect("shake", {
+          direction: "left",
+          times: 2,
+          distance: 10
+        }, 250);
+        console.log("titolo vuoto o con solo spazi");
+      } else if (!newPostText.replace(/\s/g, '').length) {
+        document.getElementById("status").innerHTML = "testo vuoto o con solo spazi";
+        $("#status").fadeIn('fast');
+        $("#status").effect("shake", {
+          direction: "left",
+          times: 2,
+          distance: 10
+        }, 250);
+        console.log("testo vuoto o con solo spazi");
+      } else {
+        var newPostAuthorUsername = newPostAuthor.username;
+        var newPostId = posts.length + 1;
+        const date = new Date();
+        var newPostFormattedDate = date.toLocaleString();
+        var newPost = {
+          id: newPostId,
+          author: newPostAuthorUsername,
+          title: newPostTitle,
+          text: newPostText,
+          date: newPostFormattedDate,
+          likes: [],
+          comments: []
+        };
+        posts.push(newPost);
+        res.status(201).send(newPost);
+      }
     }
   });
 
