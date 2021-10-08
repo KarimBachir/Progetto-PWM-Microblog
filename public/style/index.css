@@ -53,6 +53,7 @@
   cursor: auto;
   display: none;
   width: fit-content;
+  max-width: 20vw;
   background-color: #555;
   color: #fff;
   font-style: normal;
@@ -65,6 +66,7 @@
 
 #status {
   display: none;
+  width: -moz-fit-content;
   width: fit-content;
   background-color: #d90000;
   border-left: 5px solid rgb(0, 78, 121);

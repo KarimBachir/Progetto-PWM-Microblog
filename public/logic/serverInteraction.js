@@ -41,9 +41,39 @@ function validateSignin(name, surname, email, birthday, username, password) {
     output.result = true;
   }
   return output;
-};
-$(document).ready(function() {
+}
 
+function validateNewPost(title, text) {
+  var output = {
+    result: false,
+    text: ''
+  };
+  if (!title.replace(/\s/g, '').length) {
+    output.text = "titolo vuoto o con solo spazi";
+  } else if (!text.replace(/\s/g, '').length) {
+    output.text = "testo vuoto o con solo spazi";
+  } else {
+    output.result = true;
+  }
+  return output;
+}
+
+function validateNewComment(text) {
+  var output = {
+    result: false,
+    text: ''
+  };
+  if (!text.replace(/\s/g, '').length) {
+    output.text = "testo vuoto o con solo spazi";
+  } else {
+    output.result = true;
+  }
+  return output;
+}
+$(document).ready(function() {
+  $('#status').on('click', function() {
+    $("#status").fadeOut('fast');
+  });
   //login
   $('#loginButton').on('click', function() {
 
@@ -166,54 +196,93 @@ $(document).ready(function() {
 
   //nuovo post
   $('#postButton').on('click', function() {
-    xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function(response) {
-      if (this.readyState === 4 && this.status === 201) {
-        location.reload();
-      } else if (this.readyState === 4 && this.status === 401) {
-        document.getElementById("loginNeededSection").style.height = "100%";
+    var title = $('#title').val();
+    var text = $('#newPostText').val();
+    var validation = validateNewPost(title, text);
+    if (validation.result) {
+      xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function(response) {
+        if (this.readyState === 4 && this.status === 201) {
+          location.reload();
+        } else if (this.readyState === 4 && this.status === 400) {
+          document.getElementById("status").innerHTML = JSON.parse(this.responseText).text;
+          $("#status").fadeIn('fast');
+          $("#status").effect("shake", {
+            direction: "left",
+            times: 2,
+            distance: 10
+          }, 250);
+        } else if (this.readyState === 4 && this.status === 401) {
+          document.getElementById("loginNeededSection").style.height = "100%";
+        }
+      }
+      var newPost = {
+        title: title,
+        text: text
       };
-    };
 
-    var title = $('#title');
-    var text = $('#newPostText');
-    var newPost = {
-      title: title.val(),
-      text: text.val()
-    };
-
-    var address = "/microblog/posts";
-    xhttp.open("POST", address);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(JSON.stringify(newPost));
+      var address = "/microblog/posts";
+      xhttp.open("POST", address);
+      xhttp.setRequestHeader("Content-type", "application/json");
+      xhttp.send(JSON.stringify(newPost));
+    } else {
+      document.getElementById("status").innerHTML = validation.text;
+      $("#status").fadeIn('fast');
+      $("#status").effect("shake", {
+        direction: "left",
+        times: 2,
+        distance: 10
+      }, 250);
+    }
   });
 
   //nuovo commento
   $('#newCommentButton').on('click', function() {
-    xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function(response) {
-      if (this.readyState === 4 && this.status === 201) {
-        var iframe = document.getElementById('commentsIframe');
-        var comments = iframe.contentWindow.document.getElementById('comments');
-        var postId = document.getElementById('newCommentPostId').getAttribute('value');
-        var newCommentHTML = response.srcElement.response;
-        comments.innerHTML = newCommentHTML + iframe.contentWindow.document.getElementById('comments').innerHTML;
+    var text = $('#newCommentText').val();
+    var validation = validateNewComment(text);
+    if (validation.result) {
+      xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function(response) {
+        if (this.readyState === 4 && this.status === 201) {
+          var iframe = document.getElementById('commentsIframe');
+          var comments = iframe.contentWindow.document.getElementById('comments');
+          var postId = document.getElementById('newCommentPostId').getAttribute('value');
+          var newCommentHTML = response.srcElement.response;
+          comments.innerHTML = newCommentHTML + iframe.contentWindow.document.getElementById('comments').innerHTML;
+          document.getElementById('commentCounter' + postId).innerHTML++;
 
-        document.getElementById('commentCounter' + postId).innerHTML++;
-      } else if (this.readyState === 4 && this.status === 401) {
-        document.getElementById("loginNeededSection").style.height = "100%";
-      }
-    };
+        } else if (this.readyState === 4 && this.status === 400) {
+          document.getElementById("status").innerHTML = JSON.parse(this.responseText).text;
+          $("#status").fadeIn('fast');
+          $("#status").effect("shake", {
+            direction: "left",
+            times: 2,
+            distance: 10
+          }, 250);
 
-    var text = $('#newCommentText');
-    var newComment = {
-      text: text.val()
-    };
-    var postId = document.getElementById('newCommentPostId').getAttribute('value');
-    var address = "/microblog/posts/" + postId + "/comments";
-    xhttp.open("POST", address);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(JSON.stringify(newComment));
+        } else if (this.readyState === 4 && this.status === 401) {
+          document.getElementById("loginNeededSection").style.height = "100%";
+        }
+      };
+
+      var newComment = {
+        text: text
+      };
+      var postId = document.getElementById('newCommentPostId').getAttribute('value');
+      var address = "/microblog/posts/" + postId + "/comments";
+      xhttp.open("POST", address);
+      xhttp.setRequestHeader("Content-type", "application/json");
+      xhttp.send(JSON.stringify(newComment));
+
+    } else {
+      document.getElementById("status").innerHTML = validation.text;
+      $("#status").fadeIn('fast');
+      $("#status").effect("shake", {
+        direction: "left",
+        times: 2,
+        distance: 10
+      }, 250);
+    }
   });
 
 });

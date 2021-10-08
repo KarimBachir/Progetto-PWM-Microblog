@@ -25,6 +25,7 @@ $(document).ready(function() {
 
   //chiude il form per creare un post
   $("#closeNewPostSectionButton").on('click', function() {
+    $("#status").fadeOut('fast');
     document.getElementById("newPostSection").style.height = "0%";
     document.getElementById("newPostSection").style.overflow = "hidden";
   });
@@ -44,12 +45,9 @@ $(document).ready(function() {
 
   //chiude la sezione commenti del post
   $("#closeCommentsSectionButton").on('click', function() {
+    $("#status").fadeOut('fast');
     document.getElementById("commentsSection").style.height = "0%";
     document.getElementById("commentsSection").style.overflow = "hidden";
-
-    for (var i = 0; i < document.getElementsByClassName("fullscreenSection").length; i++) {
-      document.getElementsByClassName("fullscreenSection")[i].style.top = "0";
-    };
   });
 
 });

@@ -174,7 +174,35 @@ module.exports = function(app) {
       output.result = true;
     }
     return output;
-  };
+  }
+
+  function validateNewPost(title, text) {
+    var output = {
+      result: false,
+      text: ''
+    };
+    if (!title.replace(/\s/g, '').length) {
+      output.text = "titolo vuoto o con solo spazi";
+    } else if (!text.replace(/\s/g, '').length) {
+      output.text = "testo vuoto o con solo spazi";
+    } else {
+      output.result = true;
+    }
+    return output;
+  }
+
+  function validateNewComment(text) {
+    var output = {
+      result: false,
+      text: ''
+    };
+    if (!text.replace(/\s/g, '').length) {
+      output.text = "testo vuoto o con solo spazi";
+    } else {
+      output.result = true;
+    }
+    return output;
+  }
 
   app.get('/microblog', function(req, res) {
     var date = new Date();
@@ -270,26 +298,9 @@ module.exports = function(app) {
 
       var newPostTitle = req.body.title;
       var newPostText = req.body.text;
+      var validation = validateNewPost(newPostTitle, newPostText);
 
-      if (!newPostTitle.replace(/\s/g, '').length) {
-        document.getElementById("status").innerHTML = 'titolo vuoto o con solo spazi';
-        $("#status").fadeIn('fast');
-        $("#status").effect("shake", {
-          direction: "left",
-          times: 2,
-          distance: 10
-        }, 250);
-        console.log("titolo vuoto o con solo spazi");
-      } else if (!newPostText.replace(/\s/g, '').length) {
-        document.getElementById("status").innerHTML = "testo vuoto o con solo spazi";
-        $("#status").fadeIn('fast');
-        $("#status").effect("shake", {
-          direction: "left",
-          times: 2,
-          distance: 10
-        }, 250);
-        console.log("testo vuoto o con solo spazi");
-      } else {
+      if (validation.result) {
         var newPostAuthorUsername = newPostAuthor.username;
         var newPostId = posts.length + 1;
         const date = new Date();
@@ -305,8 +316,11 @@ module.exports = function(app) {
         };
         posts.push(newPost);
         res.status(201).send(newPost);
+      } else {
+        res.status(400).json(validation);
       }
     }
+
   });
 
   //aggiunge o toglie un like
@@ -353,33 +367,39 @@ module.exports = function(app) {
         message: "Devi effettuare l'accesso per accedere a questa pagina!"
       });
     } else {
-      var postId = req.params.id;
-      var post = posts.find(post => post.id.toString() === postId);
-
-      var newCommentAuthorUsername = newCommentAuthor.username;
       var newCommentText = req.body.text;
-      const date = new Date();
-      var newCommentDate = date.toLocaleString();
-      var newComment = {
-        author: newCommentAuthorUsername,
-        text: newCommentText,
-        date: newCommentDate
-      };
+      var validation = validateNewComment(newCommentText);
 
-      post.comments.push(newComment);
+      if (validation.result) {
+        var postId = req.params.id;
+        var post = posts.find(post => post.id.toString() === postId);
 
-      res.set('Content-Type', 'text/plain');
-      res.status(201).send("<div class=\"comment-container\">" +
-        "<div class=\"comment-item commentAuthor\">" +
-        newCommentAuthorUsername +
-        "</div>" +
-        "<div class=\"comment-item commentText\">" +
-        newCommentText +
-        "</div>" +
-        "<div class=\"comment-item commentDate\">" +
-        newCommentDate +
-        "</div>" +
-        "</div>");
+        var newCommentAuthorUsername = newCommentAuthor.username;
+        const date = new Date();
+        var newCommentDate = date.toLocaleString();
+        var newComment = {
+          author: newCommentAuthorUsername,
+          text: newCommentText,
+          date: newCommentDate
+        };
+
+        post.comments.push(newComment);
+
+        res.set('Content-Type', 'text/plain');
+        res.status(201).send("<div class=\"comment-container\">" +
+          "<div class=\"comment-item commentAuthor\">" +
+          newCommentAuthorUsername +
+          "</div>" +
+          "<div class=\"comment-item commentText\">" +
+          newCommentText +
+          "</div>" +
+          "<div class=\"comment-item commentDate\">" +
+          newCommentDate +
+          "</div>" +
+          "</div>");
+      } else {
+        res.status(400).json(validation);
+      }
     }
   });
 

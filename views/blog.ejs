@@ -18,31 +18,28 @@
   <body>
     <!-- sezione di avviso login necessario a comparsa comparsa/scomparsa -->
     <div id="loginNeededSection" class="fullscreenSection">
-
       <!-- Modal content -->
       <a class="closebtn" id="closeLoginNeededSectionButton">&times;</a>
       <div id="loginNeededContainer">
         <p>Devi aver effettuato il login!</p>
       </div>
-
     </div>
 
+    <div id="status">
+      <p> <%= status %></p>
+    </div>
     <!-- sezione dei post a comparsa/scomparsa -->
     <div class="fullscreenSection" id="newPostSection">
       <a class="closebtn" id="closeNewPostSectionButton">&times;</a>
       <!-- post form -->
       <div id="post-form-container">
-        <h2>Pubblica un post:</h2>
+        <h3>Pubblica un post:</h3>
         <label for="title">Titolo</label>
         <input type="text" id="title" name="title">
         <label for="newPostText">testo</label>
         <textarea id="newPostText" name="newPostText" rows="5"></textarea>
         <button type="submit" id="postButton">Pubblica</button>
       </div>
-      <div id="status">
-        <p> <%= status %></p>
-      </div>
-    </div>
     </div>
 
     <!-- sezione dei commenti a comparsa/scomparsa -->
@@ -51,7 +48,7 @@
       <!-- comment form -->
       <div id="comments-section-container">
         <div id="newCommentForm">
-          <h2>Commenta:</h2>
+          <h3>Commenta:</h3>
           <textarea id="newCommentText" name="commentText" rows="2"></textarea>
           <button type="submit" id="newCommentButton">Pubblica</button>
           <input type="hidden" id="newCommentPostId" value="">
@@ -59,7 +56,6 @@
         <iframe id="commentsIframe" title="comments"></iframe>
       </div>
     </div>
-
 
     <div id="navBar">
       <a id="profileButton"><i class="bi bi-person-circle"></i> Profilo</a>
