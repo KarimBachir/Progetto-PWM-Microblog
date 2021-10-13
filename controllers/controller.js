@@ -1,21 +1,6 @@
-//database
-var users = [{
-  id: 1,
-  name: 'admin',
-  surname: 'admin',
-  email: 'admin@admin.com',
-  birthday: 'none',
-  username: 'admin',
-  password: 'admin'
-}, {
-  id: 2,
-  name: 'jellylama',
-  surname: 'jellylama',
-  email: 'jellylama@jellylama.com',
-  birthday: '28/07/2001',
-  username: 'jellylama',
-  password: 'jellylama'
-}];
+var mongoose = require('mongoose');
+var userModel = require('../models/userModel');
+var postModel = require('../models/postModel');
 var posts = [{
   id: 1,
   author: 'admin',
@@ -128,9 +113,41 @@ var posts = [{
     text: 'mi sa di no...',
     date: '19/8/2021, 16:12:21'
   }]
-}]
+}];
+//connessione al database
+mongoose.connect('mongodb://127.0.0.1:27017/microblog');
 
 module.exports = function(app) {
+
+  async function findUserByUsernamePassword(username, password) {
+    var output;
+    await userModel.findOne({
+      username: username,
+      password: password
+    }).exec().then(function(user) {
+      output = user.toObject();
+    });
+    return output;
+  }
+
+  async function findUserByUsername(username) {
+    var output;
+    await userModel.findOne({
+      username: username
+    }).exec().then(function(user) {
+      output = user.toObject();
+    });
+    return output;
+  }
+
+  async function findUserById(id) {
+    var output;
+    await userModel.findById(id).exec().then(function(user) {
+      output = user.toObject();
+    });
+    return output;
+  }
+
   function validateSignin(name, surname, email, birthday, username, password) {
     var output = {
       result: false,
@@ -156,6 +173,8 @@ module.exports = function(app) {
     //uno o più spazi
     let spacePattern = new RegExp(/[\s]+/);
 
+    var user = findUserByUsername(username);
+
     if (!namePattern.test(name)) {
       output.text = "nome non idoneo, verifica i requisiti...";
     } else if (!namePattern.test(surname)) {
@@ -164,6 +183,8 @@ module.exports = function(app) {
       output.text = "email non idonea, verifica i requisiti...";
     } else if (!datePattern.test(birthday)) {
       output.text = "data non idonea...";
+    } else if (user) {
+      output.text = "username già utilizzato da un altro utente...";
     } else if (!usernamePattern.test(username)) {
       output.text = "username non idoneo, verifica i requisiti...";
     } else if (spacePattern.test(password)) {
@@ -208,7 +229,7 @@ module.exports = function(app) {
     var date = new Date();
     res.render('index', {
       status: '',
-      today: date.toISOString().substring(0, 10)
+      today: date.toISOString().substring(0, 10) //serve per limitare il campo birthday nel form di signin
     });
   });
 
@@ -221,17 +242,17 @@ module.exports = function(app) {
     });
   });
 
-  app.post('/microblog/login', function(req, res) {
+  app.post('/microblog/login', async function(req, res) {
     var reqUsername = req.body.username;
     var reqPassword = req.body.password;
-    var user = users.find(user => user.username === reqUsername && user.password === reqPassword);
-
+    var user = await findUserByUsernamePassword(reqUsername, reqPassword);
     if (user) {
-      res.cookie('sessionId', user.id).sendStatus(200);
+      res.cookie('sessionId', user._id).sendStatus(200);
+      console.log('L\'utente on id: ' + user._id + ' e username: ' + user.username + ' si è loggato');
     } else {
       res.sendStatus(404);
     }
-
+    //var user = users.find(user => user.username === reqUsername && user.password === reqPassword);
   });
 
   app.get('/microblog/logout', function(req, res) {
@@ -239,28 +260,27 @@ module.exports = function(app) {
     res.status(200).redirect('/microblog');
   });
 
-  app.post('/microblog/signin', function(req, res) {
+  app.post('/microblog/signin', async function(req, res) {
     var reqName = req.body.name;
     var reqSurname = req.body.surname;
     var reqEmail = req.body.email;
     var reqBirthday = req.body.birthday;
     var reqUsername = req.body.username;
     var reqPassword = req.body.password;
-    var id = users.length + 1;
     var validation = validateSignin(reqName, reqSurname, reqEmail, reqBirthday, reqUsername, reqPassword);
     if (validation.result) {
 
-      var newUser = {
-        id: id,
+      var newUser = new userModel({
         name: reqName,
         surname: reqSurname,
         email: reqEmail,
         birthday: reqBirthday,
         username: reqUsername,
         password: reqPassword
-      };
-      users.push(newUser);
-      res.cookie('sessionId', id).sendStatus(201);
+      });
+      await newUser.save();
+      console.log('Nuovo utente con username: ' + reqUsername + ' registrato');
+      res.cookie('sessionId', signedInUser._id).sendStatus(201);
     } else {
       res.status(400).json(validation);
     }
@@ -270,9 +290,8 @@ module.exports = function(app) {
   app.get('/microblog/blog', function(req, res) {
     var sessionId = req.cookies.sessionId;
     //cerca un utente che abbia quell'id
-    var user = users.find(user => user.id.toString() === sessionId);
-
-    if (user === undefined) {
+    var user = findUserById(sessionId);
+    if (user === undefined || user === null) {
       res.status(401).render('error', {
         statusCode: '401',
         message: "Devi effettuare l'accesso per accedere a questa pagina!"
