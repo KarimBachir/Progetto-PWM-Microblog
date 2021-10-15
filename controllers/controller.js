@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
-var userModel = require('../models/userModel');
-var postModel = require('../models/postModel');
+var dbQuerys = require('../database/dbQuerys');
+var inputValidation = require('../inputValidation');
+
 var posts = [{
   id: 1,
   author: 'admin',
@@ -115,115 +115,7 @@ var posts = [{
   }]
 }];
 //connessione al database
-mongoose.connect('mongodb://127.0.0.1:27017/microblog');
-
 module.exports = function(app) {
-
-  async function findUserByUsernamePassword(username, password) {
-    var output;
-    await userModel.findOne({
-      username: username,
-      password: password
-    }).exec().then(function(user) {
-      output = user.toObject();
-    });
-    return output;
-  }
-
-  async function findUserByUsername(username) {
-    var output;
-    await userModel.findOne({
-      username: username
-    }).exec().then(function(user) {
-      output = user.toObject();
-    });
-    return output;
-  }
-
-  async function findUserById(id) {
-    var output;
-    await userModel.findById(id).exec().then(function(user) {
-      output = user.toObject();
-    });
-    return output;
-  }
-
-  function validateSignin(name, surname, email, birthday, username, password) {
-    var output = {
-      result: false,
-      text: ''
-    };
-    //almeno 3 e massimo 16 caratteri, usato per name e surname
-    let namePattern = new RegExp(/^[a-zA-Z]{3,16}$/);
-    //emailregex http://emailregex.com/
-    let emailPattern = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-    //formato accettato GG/MM/AAAA
-    let datePattern = new RegExp(/^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)\d\d$/);
-    //almeno 4 e massimo 16 caratteri, numeri o simboli
-    let usernamePattern = new RegExp(/^[\w#\?!@\$%\^&\*-]{4,16}$/);
-    /*
-    -bisogna verificare che non ci siano spazi-
-    minimo 8 e massimo 20 caratteri
-    almeno una maiuscola
-    almeno una minuscola
-    almeno un numero
-    almeno un simbolo tra #?!@$%^&*-
-    */
-    let passwordPattern = new RegExp(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[#\?!@\$%\^&\*-]).{8,20}$/);
-    //uno o più spazi
-    let spacePattern = new RegExp(/[\s]+/);
-
-    var user = findUserByUsername(username);
-
-    if (!namePattern.test(name)) {
-      output.text = "nome non idoneo, verifica i requisiti...";
-    } else if (!namePattern.test(surname)) {
-      output.text = "cognome non idoneo, verifica i requisiti...";
-    } else if (!emailPattern.test(email)) {
-      output.text = "email non idonea, verifica i requisiti...";
-    } else if (!datePattern.test(birthday)) {
-      output.text = "data non idonea...";
-    } else if (user) {
-      output.text = "username già utilizzato da un altro utente...";
-    } else if (!usernamePattern.test(username)) {
-      output.text = "username non idoneo, verifica i requisiti...";
-    } else if (spacePattern.test(password)) {
-      output.text = "la password non deve contenere spazi!";
-    } else if (!passwordPattern.test(password)) {
-      output.text = "password non idonea, verifica i requisiti...";
-    } else {
-      output.result = true;
-    }
-    return output;
-  }
-
-  function validateNewPost(title, text) {
-    var output = {
-      result: false,
-      text: ''
-    };
-    if (!title.replace(/\s/g, '').length) {
-      output.text = "titolo vuoto o con solo spazi";
-    } else if (!text.replace(/\s/g, '').length) {
-      output.text = "testo vuoto o con solo spazi";
-    } else {
-      output.result = true;
-    }
-    return output;
-  }
-
-  function validateNewComment(text) {
-    var output = {
-      result: false,
-      text: ''
-    };
-    if (!text.replace(/\s/g, '').length) {
-      output.text = "testo vuoto o con solo spazi";
-    } else {
-      output.result = true;
-    }
-    return output;
-  }
 
   app.get('/microblog', function(req, res) {
     var date = new Date();
@@ -245,14 +137,13 @@ module.exports = function(app) {
   app.post('/microblog/login', async function(req, res) {
     var reqUsername = req.body.username;
     var reqPassword = req.body.password;
-    var user = await findUserByUsernamePassword(reqUsername, reqPassword);
+    var user = await dbQuerys.findUserByUsernamePassword(reqUsername, reqPassword);
     if (user) {
-      res.cookie('sessionId', user._id).sendStatus(200);
-      console.log('L\'utente on id: ' + user._id + ' e username: ' + user.username + ' si è loggato');
+      res.cookie('sessionId', user._id.toString()).sendStatus(200);
+      console.log('#L\'utente con id: ' + user._id.toString() + ' e username: ' + user.username + ' si è loggato');
     } else {
       res.sendStatus(404);
     }
-    //var user = users.find(user => user.username === reqUsername && user.password === reqPassword);
   });
 
   app.get('/microblog/logout', function(req, res) {
@@ -267,19 +158,12 @@ module.exports = function(app) {
     var reqBirthday = req.body.birthday;
     var reqUsername = req.body.username;
     var reqPassword = req.body.password;
-    var validation = validateSignin(reqName, reqSurname, reqEmail, reqBirthday, reqUsername, reqPassword);
-    if (validation.result) {
+    var validation = await inputValidation.validateSignin(reqName, reqSurname, reqEmail, reqBirthday, reqUsername, reqPassword);
 
-      var newUser = new userModel({
-        name: reqName,
-        surname: reqSurname,
-        email: reqEmail,
-        birthday: reqBirthday,
-        username: reqUsername,
-        password: reqPassword
-      });
-      await newUser.save();
-      console.log('Nuovo utente con username: ' + reqUsername + ' registrato');
+    if (validation.result) {
+      var signedInUser = await dbQuerys.addUser(reqName, reqSurname, reqEmail, reqBirthday, reqUsername, reqPassword);
+      console.log('Nuovo utente con username: ' + signedInUser.username + ' e id: ' + signedInUser._id + ' registrato');
+      console.log('#L\'utente con id: ' + signedInUser._id + ' e username: ' + signedInUser.username + ' si è loggato');
       res.cookie('sessionId', signedInUser._id).sendStatus(201);
     } else {
       res.status(400).json(validation);
@@ -287,10 +171,14 @@ module.exports = function(app) {
 
   });
 
-  app.get('/microblog/blog', function(req, res) {
+  app.get('/microblog/blog', async function(req, res) {
     var sessionId = req.cookies.sessionId;
+    var user;
+    //la query accetta stringhe da minimo 12 byte
+    if (Buffer.byteLength(sessionId, 'utf8') >= 12) {
+      user = await dbQuerys.findUserById(sessionId);
+    }
     //cerca un utente che abbia quell'id
-    var user = findUserById(sessionId);
     if (user === undefined || user === null) {
       res.status(401).render('error', {
         statusCode: '401',
@@ -317,7 +205,7 @@ module.exports = function(app) {
 
       var newPostTitle = req.body.title;
       var newPostText = req.body.text;
-      var validation = validateNewPost(newPostTitle, newPostText);
+      var validation = inputValidation.validateNewPost(newPostTitle, newPostText);
 
       if (validation.result) {
         var newPostAuthorUsername = newPostAuthor.username;
@@ -387,7 +275,7 @@ module.exports = function(app) {
       });
     } else {
       var newCommentText = req.body.text;
-      var validation = validateNewComment(newCommentText);
+      var validation = inputValidation.validateNewComment(newCommentText);
 
       if (validation.result) {
         var postId = req.params.id;
