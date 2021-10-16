@@ -130,10 +130,8 @@ module.exports = function(app) {
   });
 
   //restituisce la pagina con i commenti di un post dato il suo id
-  app.get('/microblog/posts/:id/comments', function(req, res) {
-    var postId = req.params.id;
-    var post = posts.find(post => post.id.toString() === postId);
-    var comments = post.comments;
+  app.get('/microblog/posts/:id/comments', async function(req, res) {
+    var comments = await dbQueries.findPostComments(req.params.id);
 
     res.render('comments', {
       comments: comments
@@ -142,9 +140,9 @@ module.exports = function(app) {
   });
 
   //aggiunge un nuovo commento relativo ad un post dato il suo id
-  app.post('/microblog/posts/:id/comments', function(req, res) {
-    var newCommentAuthor = users.find(user => user.id.toString() === req.cookies.sessionId);
-    if (newCommentAuthor === undefined) {
+  app.post('/microblog/posts/:id/comments', async function(req, res) {
+    var newCommentAuthor = await dbQueries.findUserById(req.cookies.sessionId);
+    if (newCommentAuthor === undefined || newCommentAuthor === null) {
       res.status(401).render('error', {
         statusCode: '401',
         message: "Devi effettuare l'accesso per accedere a questa pagina!"
@@ -154,30 +152,18 @@ module.exports = function(app) {
       var validation = inputValidation.validateNewComment(newCommentText);
 
       if (validation.result) {
-        var postId = req.params.id;
-        var post = posts.find(post => post.id.toString() === postId);
-
-        var newCommentAuthorUsername = newCommentAuthor.username;
-        const date = new Date();
-        var newCommentDate = date.toLocaleString();
-        var newComment = {
-          author: newCommentAuthorUsername,
-          text: newCommentText,
-          date: newCommentDate
-        };
-
-        post.comments.push(newComment);
+        var updatedPost = await dbQueries.addComment(req.params.id, newCommentAuthor._id, newCommentText);
 
         res.set('Content-Type', 'text/plain');
         res.status(201).send("<div class=\"comment-container\">" +
           "<div class=\"comment-item commentAuthor\">" +
-          newCommentAuthorUsername +
+          updatedPost.comments[updatedPost.comments.length - 1].author.username +
           "</div>" +
           "<div class=\"comment-item commentText\">" +
-          newCommentText +
+          updatedPost.comments[updatedPost.comments.length - 1].text +
           "</div>" +
           "<div class=\"comment-item commentDate\">" +
-          newCommentDate +
+          updatedPost.comments[updatedPost.comments.length - 1].date +
           "</div>" +
           "</div>");
       } else {

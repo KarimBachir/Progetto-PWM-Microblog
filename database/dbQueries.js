@@ -6,19 +6,19 @@ async function findUserByUsernamePassword(username, password) {
   var output = await userModel.findOne({
     username: username,
     password: password
-  }).exec();
+  });
   return output;
 }
 
 async function findUserByUsername(username) {
   var output = await userModel.findOne({
     username: username
-  }).exec();
+  });
   return output;
 }
 
 async function findUserById(id) {
-  var output = await userModel.findById(id).exec();
+  var output = await userModel.findById(id);
   return output;
 }
 
@@ -42,7 +42,7 @@ async function findAllPosts() {
   }).populate({
     path: 'likes',
     select: 'username'
-  }).exec();
+  });
   return output;
 }
 
@@ -76,13 +76,48 @@ async function patchPostLikesByUserId(postId, userId) {
 }
 
 async function findPostById(id) {
-  var output = await postModel.findById(id).exec();
+  var output = await postModel.findById(id);
   return output;
 }
 
 async function findPostLikes(postId) {
-  var post = await postModel.findById(postId, 'likes').exec();
+  var post = await postModel.findById(postId, 'likes');
   return post.likes;
+}
+
+async function findPostComments(postId) {
+  var post = await postModel.findById(postId, 'comments').populate({
+    path: 'comments', // con comments.x si può popolare un commento specifico
+    populate: {
+      path: 'author'
+    }
+  });
+  return post.comments;
+}
+
+async function addComment(postId, userId, text) {
+  const date = new Date();
+  var newCommentDate = date.toLocaleString();
+  var output = await postModel.findByIdAndUpdate(
+    postId, {
+      $push: {
+        "comments": {
+          author: userId,
+          text: text,
+          date: newCommentDate
+        }
+      }
+    }, {
+      safe: true,
+      upsert: true,
+      new: true
+    }).populate({
+    path: 'comments', // con comments.x si può popolare un commento specifico
+    populate: {
+      path: 'author'
+    }
+  });
+  return output;
 }
 
 module.exports = {
@@ -94,5 +129,7 @@ module.exports = {
   patchPostLikesByUserId,
   findAllPosts,
   findPostById,
-  findPostLikes
+  findPostLikes,
+  findPostComments,
+  addComment
 };
