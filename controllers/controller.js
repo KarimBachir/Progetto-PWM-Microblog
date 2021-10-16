@@ -65,7 +65,7 @@ module.exports = function(app) {
     //sessionId non settato
     if (sessionId != undefined) {
       //la query accetta stringhe da minimo 12 byte
-      if (Buffer.byteLength(sessionId, 'utf8') >= 12) {
+      if (Buffer.byteLength(sessionId, 'utf8') == 24) {
         user = await dbQueries.findUserById(sessionId);
       }
     }
