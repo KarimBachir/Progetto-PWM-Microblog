@@ -35,9 +35,34 @@ async function addUser(name, surname, email, birthday, username, password) {
   return output;
 }
 
+async function findAllPosts() {
+  var output = await postModel.find().populate({
+    path: 'author',
+    select: 'username'
+  }).exec();
+  return output;
+}
+
+async function addPost(authorId, title, text, date) {
+  var newPost = new postModel({
+    author: authorId,
+    title: title,
+    text: text,
+    date: date //gg/m/aaaa
+  });
+  var output = await newPost.save();
+  await output.populate({
+    path: 'author',
+    select: 'username'
+  });
+  return output;
+}
+
 module.exports = {
-  findUserByUsernamePassword,
-  findUserByUsername,
-  findUserById,
   addUser,
+  findUserById,
+  findUserByUsername,
+  findUserByUsernamePassword,
+  addPost,
+  findAllPosts
 };

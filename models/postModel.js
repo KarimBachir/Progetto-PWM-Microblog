@@ -11,7 +11,8 @@ const postSchema = new Schema({
   date: String, //gg/m/aaaa
   likes: [{
     type: Schema.Types.ObjectId,
-    ref: 'user'
+    ref: 'user',
+    default: {}
   }],
   comments: [{
     author: {
@@ -20,7 +21,8 @@ const postSchema = new Schema({
     },
     text: String,
     date: String
-  }]
+  }],
+  default: {}
 });
 
 const PostModel = mongoose.model('post', postSchema);

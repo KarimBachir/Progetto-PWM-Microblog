@@ -1,4 +1,4 @@
-var dbQuerys = require('./database/dbQuerys');
+var dbQuerys = require('./database/dbQueries');
 
 async function validateSignin(name, surname, email, birthday, username, password) {
   var output = {

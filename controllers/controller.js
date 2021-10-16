@@ -1,119 +1,6 @@
-var dbQuerys = require('../database/dbQuerys');
+var dbQueries = require('../database/dbQueries');
 var inputValidation = require('../inputValidation');
 
-var posts = [{
-  id: 1,
-  author: 'admin',
-  title: 'Ho fame',
-  text: 'Ho molta fame, cosa mi consigliate di mangiare?',
-  date: '19/8/2021, 16:12:21',
-  likes: ['admin', 'jellylama'],
-  comments: [{
-    author: 'admin',
-    text: 'nessuno risponde?',
-    date: '19/8/2021, 16:12:21'
-  }, {
-    author: 'admin',
-    text: 'mi sa di no...',
-    date: '19/8/2021, 16:12:21'
-  }]
-}, {
-  id: 2,
-  author: 'admin',
-  title: 'Ho sete',
-  text: 'Ho molta sete, cosa mi consigliate di bere?',
-  date: '19/8/2021, 16:12:21',
-  likes: ['jellylama'],
-  comments: [{
-    author: 'admin',
-    text: 'nessuno risponde?',
-    date: '19/8/2021, 16:12:21'
-  }, {
-    author: 'admin',
-    text: 'mi sa di no...',
-    date: '19/8/2021, 16:12:21'
-  }]
-}, {
-  id: 3,
-  author: 'admin',
-  title: 'Ho sete',
-  text: 'Ho molta sete, cosa mi consigliate di bere?',
-  date: '19/8/2021, 16:12:21',
-  likes: ['jellylama'],
-  comments: [{
-    author: 'admin',
-    text: 'nessuno risponde?',
-    date: '19/8/2021, 16:12:21'
-  }, {
-    author: 'admin',
-    text: 'mi sa di no...',
-    date: '19/8/2021, 16:12:21'
-  }]
-}, {
-  id: 4,
-  author: 'admin',
-  title: 'Ho sete',
-  text: 'Ho molta sete, cosa mi consigliate di bere?',
-  date: '19/8/2021, 16:12:21',
-  likes: ['jellylama'],
-  comments: [{
-    author: 'admin',
-    text: 'nessuno risponde?',
-    date: '19/8/2021, 16:12:21'
-  }, {
-    author: 'admin',
-    text: 'mi sa di no...',
-    date: '19/8/2021, 16:12:21'
-  }]
-}, {
-  id: 5,
-  author: 'admin',
-  title: 'Ho sete',
-  text: 'Ho molta sete, cosa mi consigliate di bere?',
-  date: '19/8/2021, 16:12:21',
-  likes: ['jellylama'],
-  comments: [{
-    author: 'admin',
-    text: 'nessuno risponde?',
-    date: '19/8/2021, 16:12:21'
-  }, {
-    author: 'admin',
-    text: 'mi sa di no...',
-    date: '19/8/2021, 16:12:21'
-  }, {
-    author: 'admin',
-    text: 'nessuno risponde?',
-    date: '19/8/2021, 16:12:21'
-  }, {
-    author: 'admin',
-    text: 'mi sa di no...',
-    date: '19/8/2021, 16:12:21'
-  }, {
-    author: 'admin',
-    text: 'nessuno risponde?',
-    date: '19/8/2021, 16:12:21'
-  }, {
-    author: 'admin',
-    text: 'mi sa di no...',
-    date: '19/8/2021, 16:12:21'
-  }, {
-    author: 'admin',
-    text: 'nessuno risponde?',
-    date: '19/8/2021, 16:12:21'
-  }, {
-    author: 'admin',
-    text: 'mi sa di no...',
-    date: '19/8/2021, 16:12:21'
-  }, {
-    author: 'admin',
-    text: 'nessuno risponde?',
-    date: '19/8/2021, 16:12:21'
-  }, {
-    author: 'admin',
-    text: 'mi sa di no...',
-    date: '19/8/2021, 16:12:21'
-  }]
-}];
 //connessione al database
 module.exports = function(app) {
 
@@ -137,7 +24,7 @@ module.exports = function(app) {
   app.post('/microblog/login', async function(req, res) {
     var reqUsername = req.body.username;
     var reqPassword = req.body.password;
-    var user = await dbQuerys.findUserByUsernamePassword(reqUsername, reqPassword);
+    var user = await dbQueries.findUserByUsernamePassword(reqUsername, reqPassword);
     if (user) {
       res.cookie('sessionId', user._id.toString()).sendStatus(200);
       console.log('#L\'utente con id: ' + user._id.toString() + ' e username: ' + user.username + ' si è loggato');
@@ -161,10 +48,10 @@ module.exports = function(app) {
     var validation = await inputValidation.validateSignin(reqName, reqSurname, reqEmail, reqBirthday, reqUsername, reqPassword);
 
     if (validation.result) {
-      var signedInUser = await dbQuerys.addUser(reqName, reqSurname, reqEmail, reqBirthday, reqUsername, reqPassword);
-      console.log('Nuovo utente con username: ' + signedInUser.username + ' e id: ' + signedInUser._id + ' registrato');
-      console.log('#L\'utente con id: ' + signedInUser._id + ' e username: ' + signedInUser.username + ' si è loggato');
-      res.cookie('sessionId', signedInUser._id).sendStatus(201);
+      var signedInUser = await dbQueries.addUser(reqName, reqSurname, reqEmail, reqBirthday, reqUsername, reqPassword);
+      console.log('Nuovo utente con username: ' + signedInUser.username + ' e id: ' + signedInUser._id.toString() + ' registrato');
+      console.log('#L\'utente con id: ' + signedInUser._id.toString() + ' e username: ' + signedInUser.username + ' si è loggato');
+      res.cookie('sessionId', signedInUser._id.toString()).sendStatus(201);
     } else {
       res.status(400).json(validation);
     }
@@ -176,7 +63,7 @@ module.exports = function(app) {
     var user;
     //la query accetta stringhe da minimo 12 byte
     if (Buffer.byteLength(sessionId, 'utf8') >= 12) {
-      user = await dbQuerys.findUserById(sessionId);
+      user = await dbQueries.findUserById(sessionId);
     }
     //cerca un utente che abbia quell'id
     if (user === undefined || user === null) {
@@ -185,6 +72,7 @@ module.exports = function(app) {
         message: "Devi effettuare l'accesso per accedere a questa pagina!"
       });
     } else {
+      var posts = await dbQueries.findAllPosts();
       res.status(200).render('blog', {
         status: '',
         username: user.username,
@@ -194,8 +82,8 @@ module.exports = function(app) {
   });
 
   //riceve un nuovo post, lo inserisce nel db e lo invia al client
-  app.post('/microblog/posts', function(req, res) {
-    var newPostAuthor = users.find(user => user.id.toString() === req.cookies.sessionId);
+  app.post('/microblog/posts', async function(req, res) {
+    var newPostAuthor = await dbQueries.findUserById(req.cookies.sessionId);
     if (newPostAuthor === undefined) {
       res.status(401).render('error', {
         statusCode: '401',
@@ -208,20 +96,10 @@ module.exports = function(app) {
       var validation = inputValidation.validateNewPost(newPostTitle, newPostText);
 
       if (validation.result) {
-        var newPostAuthorUsername = newPostAuthor.username;
-        var newPostId = posts.length + 1;
+        var newPostAuthorId = newPostAuthor._id.toString();
         const date = new Date();
         var newPostFormattedDate = date.toLocaleString();
-        var newPost = {
-          id: newPostId,
-          author: newPostAuthorUsername,
-          title: newPostTitle,
-          text: newPostText,
-          date: newPostFormattedDate,
-          likes: [],
-          comments: []
-        };
-        posts.push(newPost);
+        var newPost = await dbQueries.addPost(newPostAuthorId, newPostTitle, newPostText, newPostFormattedDate);
         res.status(201).send(newPost);
       } else {
         res.status(400).json(validation);
