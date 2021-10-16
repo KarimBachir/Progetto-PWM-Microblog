@@ -12,8 +12,9 @@ module.exports = function(app) {
     });
   });
 
-  app.get('/microblog/guest', function(req, res) {
+  app.get('/microblog/guest', async function(req, res) {
     res.clearCookie('sessionId');
+    var posts = await dbQueries.findAllPosts();
     res.status(200).render('blog', {
       status: '',
       username: 'Guest',
@@ -61,9 +62,12 @@ module.exports = function(app) {
   app.get('/microblog/blog', async function(req, res) {
     var sessionId = req.cookies.sessionId;
     var user;
-    //la query accetta stringhe da minimo 12 byte
-    if (Buffer.byteLength(sessionId, 'utf8') >= 12) {
-      user = await dbQueries.findUserById(sessionId);
+    //sessionId non settato
+    if (sessionId != undefined) {
+      //la query accetta stringhe da minimo 12 byte
+      if (Buffer.byteLength(sessionId, 'utf8') >= 12) {
+        user = await dbQueries.findUserById(sessionId);
+      }
     }
     //cerca un utente che abbia quell'id
     if (user === undefined || user === null) {
@@ -84,7 +88,7 @@ module.exports = function(app) {
   //riceve un nuovo post, lo inserisce nel db e lo invia al client
   app.post('/microblog/posts', async function(req, res) {
     var newPostAuthor = await dbQueries.findUserById(req.cookies.sessionId);
-    if (newPostAuthor === undefined) {
+    if (newPostAuthor === undefined || newPostAuthor === null) {
       res.status(401).render('error', {
         statusCode: '401',
         message: "Devi effettuare l'accesso per accedere a questa pagina!"
@@ -96,7 +100,7 @@ module.exports = function(app) {
       var validation = inputValidation.validateNewPost(newPostTitle, newPostText);
 
       if (validation.result) {
-        var newPostAuthorId = newPostAuthor._id.toString();
+        var newPostAuthorId = newPostAuthor._id;
         const date = new Date();
         var newPostFormattedDate = date.toLocaleString();
         var newPost = await dbQueries.addPost(newPostAuthorId, newPostTitle, newPostText, newPostFormattedDate);
@@ -109,23 +113,17 @@ module.exports = function(app) {
   });
 
   //aggiunge o toglie un like
-  app.patch('/microblog/posts/:id/likes', function(req, res) {
-    var user = users.find(user => user.id.toString() === req.cookies.sessionId);
-    if (user === undefined) {
+  app.patch('/microblog/posts/:id/likes', async function(req, res) {
+    var user = await dbQueries.findUserById(req.cookies.sessionId);
+    if (user === undefined || user === null) {
       res.status(401).render('error', {
         statusCode: '401',
         message: "Devi effettuare l'accesso per accedere a questa pagina!"
       });
     } else {
-      var username = user.username;
+      var userId = user._id;
       var postId = req.params.id;
-      var post = posts.find(post => post.id.toString() === postId);
-
-      if (post.likes.includes(username)) {
-        post.likes = post.likes.filter(likeUsername => likeUsername != username);
-      } else {
-        post.likes.push(username);
-      }
+      await dbQueries.patchPostLikesByUserId(postId, userId);
 
       res.sendStatus(204);
     }

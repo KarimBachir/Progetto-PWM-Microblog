@@ -80,7 +80,7 @@ body {
   padding: 10px;
 }
 
-#action a {
+a {
   display: block;
   border: 3px solid rgb(0, 78, 121);
   border-radius: 5px;
@@ -94,6 +94,6 @@ body {
   cursor: pointer;
 }
 
-#action a:hover {
+a:hover {
   text-decoration: underline;
 }

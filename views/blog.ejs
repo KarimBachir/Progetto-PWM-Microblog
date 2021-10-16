@@ -82,8 +82,7 @@
         <div class="post-item post-iconbar-container" id="<%= posts[i].id %>">
           <!-- icona like -->
           <div class="post-iconbar-item">
-
-            <% if(posts[i].likes.find(user => user === username) != undefined){ %>
+            <% if(posts[i].likes.find(likeUser => likeUser.username === username) != undefined){ %>
             <img class="likeImg post-interaction-img" src="/public/img/liked.png" alt="already liked">
             <% } else{ %>
             <img class="likeImg post-interaction-img" src="/public/img/like.png" alt="click to like">

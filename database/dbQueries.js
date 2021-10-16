@@ -39,6 +39,9 @@ async function findAllPosts() {
   var output = await postModel.find().populate({
     path: 'author',
     select: 'username'
+  }).populate({
+    path: 'likes',
+    select: 'username'
   }).exec();
   return output;
 }
@@ -58,11 +61,38 @@ async function addPost(authorId, title, text, date) {
   return output;
 }
 
+async function patchPostLikesByUserId(postId, userId) {
+  var likes = await findPostLikes(postId);
+  if (likes.includes(userId)) {
+    likes = likes.filter(likeUserId => likeUserId.toString() != userId.toString());
+  } else {
+    likes.push(userId);
+  }
+  await postModel.updateOne({
+    _id: postId
+  }, {
+    likes: likes
+  });
+}
+
+async function findPostById(id) {
+  var output = await postModel.findById(id).exec();
+  return output;
+}
+
+async function findPostLikes(postId) {
+  var post = await postModel.findById(postId, 'likes').exec();
+  return post.likes;
+}
+
 module.exports = {
   addUser,
   findUserById,
   findUserByUsername,
   findUserByUsernamePassword,
   addPost,
-  findAllPosts
+  patchPostLikesByUserId,
+  findAllPosts,
+  findPostById,
+  findPostLikes
 };
