@@ -164,7 +164,7 @@ $(document).ready(function() {
   });
 
   //like
-  $(".likeImg").on('click', function() {
+  $('body').on('click', '.likeImg', function() {
     var postId = $(this).parent().parent().attr('id');
     var likeImgElement = $(this);
     var address = "/microblog/posts/" + postId + '/likes';

@@ -31,7 +31,7 @@ $(document).ready(function() {
   });
 
   //apre la sezione commenti del post
-  $(".commentImg").on('click', function() {
+  $('body').on('click', '.commentImg', function() {
     var postId = $(this).parent().parent().attr('id');
 
     document.getElementById('commentsIframe').setAttribute('src', "/microblog/posts/" + postId + '/comments');
