@@ -199,11 +199,15 @@ $(document).ready(function() {
     var title = $('#title').val();
     var text = $('#newPostText').val();
     var validation = validateNewPost(title, text);
+
     if (validation.result) {
       xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function(response) {
         if (this.readyState === 4 && this.status === 201) {
-          location.reload();
+          //aggiunge il post senza ricaricare la pagina
+          $('#posts').prepend(this.responseText);
+          //chiude il form
+          $("#closeNewPostSectionButton").trigger("click");
         } else if (this.readyState === 4 && this.status === 400) {
           document.getElementById("status").innerHTML = JSON.parse(this.responseText).text;
           $("#status").fadeIn('fast');
@@ -245,10 +249,9 @@ $(document).ready(function() {
       xhttp.onreadystatechange = function(response) {
         if (this.readyState === 4 && this.status === 201) {
           var iframe = document.getElementById('commentsIframe');
-          var comments = iframe.contentWindow.document.getElementById('comments');
-          var postId = document.getElementById('newCommentPostId').getAttribute('value');
-          var newCommentHTML = response.srcElement.response;
-          comments.innerHTML = newCommentHTML + iframe.contentWindow.document.getElementById('comments').innerHTML;
+          //aggiunge il commento senza ricaricare la pagina
+          iframe.contentWindow.$("#comments").prepend(this.responseText);
+          //incrementa di 1 il counter dei commenti
           document.getElementById('commentCounter' + postId).innerHTML++;
 
         } else if (this.readyState === 4 && this.status === 400) {

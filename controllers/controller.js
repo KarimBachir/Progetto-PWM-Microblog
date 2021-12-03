@@ -1,5 +1,6 @@
 var dbQueries = require('../database/dbQueries');
 var inputValidation = require('../inputValidation');
+var ejs = require('ejs');
 
 //connessione al database
 module.exports = function(app) {
@@ -110,7 +111,17 @@ module.exports = function(app) {
         const date = new Date();
         var newPostFormattedDate = date.toLocaleString();
         var newPost = await dbQueries.addPost(newPostAuthorId, newPostTitle, newPostText, newPostFormattedDate);
-        res.status(201).send(newPost);
+
+        //renderizza il nuovo post e lo invia al client
+        ejs.renderFile('./views/templates/postTemplate.ejs', {
+          title: newPost.title,
+          text: newPost.text,
+          author: newPost.author.username,
+          date: newPost.date,
+          postId: newPost._id
+        }, function(err, data) {
+          res.status(201).send(data);
+        });
       } else {
         res.status(400).json(validation);
       }
@@ -174,18 +185,14 @@ module.exports = function(app) {
       if (validation.result) {
         var updatedPost = await dbQueries.addComment(req.params.id, newCommentAuthor._id, newCommentText);
 
-        res.set('Content-Type', 'text/plain');
-        res.status(201).send("<div class=\"comment-container\">" +
-          "<div class=\"comment-item commentAuthor\">" +
-          updatedPost.comments[updatedPost.comments.length - 1].author.username +
-          "</div>" +
-          "<div class=\"comment-item commentText\">" +
-          updatedPost.comments[updatedPost.comments.length - 1].text +
-          "</div>" +
-          "<div class=\"comment-item commentDate\">" +
-          updatedPost.comments[updatedPost.comments.length - 1].date +
-          "</div>" +
-          "</div>");
+        //renderizza il nuovo commento e lo invia al client
+        ejs.renderFile('./views/templates/commentTemplate.ejs', {
+          author: updatedPost.comments[updatedPost.comments.length - 1].author.username,
+          text: updatedPost.comments[updatedPost.comments.length - 1].text,
+          date: updatedPost.comments[updatedPost.comments.length - 1].date,
+        }, function(err, data) {
+          res.status(201).send(data);
+        });
       } else {
         res.status(400).json(validation);
       }
