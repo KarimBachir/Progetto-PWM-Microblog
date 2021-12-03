@@ -1,0 +1,32 @@
+<!-- post -->
+<div class="post-container">
+    <div class="post-item post">
+      <h2><%= title %></h2>
+      <p><%= text %></p>
+      <div class="post-footer-container">
+        <div class="post-footer-item author"><%= author %></div>
+        <div class="post-footer-item date"><%= date %></div>
+      </div>
+    </div>
+    <!-- sidebar con icone likes commenti -->
+    <div class="post-item post-iconbar-container" id="<%= postId %>">
+      <!-- icona like -->
+      <div class="post-iconbar-item">
+        <img class="likeImg post-interaction-img" src="/public/img/like.png" alt="click to like">
+      </div>
+      <!-- numero di like -->
+      <div class="post-iconbar-item counter" id="likeCounter<%= postId %>">
+        0
+      </div>
+      <!-- icona commenti -->
+      <div class="post-iconbar-item">
+
+        <img class="commentImg post-interaction-img" src="http://127.0.0.1:3000/public/img/comment.png" alt="comment">
+
+      </div>
+      <!-- numero di commenti -->
+      <div class="post-iconbar-item counter" id="commentCounter<%= postId %>">
+        0
+      </div>
+    </div>
+  </div>
