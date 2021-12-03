@@ -26,6 +26,7 @@ module.exports = function(app) {
     var reqUsername = req.body.username;
     var reqPassword = req.body.password;
     var user = await dbQueries.findUserByUsernamePassword(reqUsername, reqPassword);
+
     if (user) {
       res.cookie('sessionId', user._id.toString()).sendStatus(200);
       console.log('#L\'utente con id: ' + user._id.toString() + ' e username: ' + user.username + ' si è loggato');
@@ -62,14 +63,12 @@ module.exports = function(app) {
   app.get('/microblog/blog', async function(req, res) {
     var sessionId = req.cookies.sessionId;
     var user;
-    //sessionId non settato
-    if (sessionId != undefined) {
-      //la query accetta stringhe da minimo 12 byte
-      if (Buffer.byteLength(sessionId, 'utf8') == 24) {
-        user = await dbQueries.findUserById(sessionId);
-      }
+
+    if (inputValidation.validateSessionId(sessionId).result) {
+      //cerca un utente che abbia quell'id
+      user = await dbQueries.findUserById(sessionId);
     }
-    //cerca un utente che abbia quell'id
+
     if (user === undefined || user === null) {
       res.status(401).render('error', {
         statusCode: '401',
@@ -87,7 +86,14 @@ module.exports = function(app) {
 
   //riceve un nuovo post, lo inserisce nel db e lo invia al client
   app.post('/microblog/posts', async function(req, res) {
-    var newPostAuthor = await dbQueries.findUserById(req.cookies.sessionId);
+    var sessionId = req.cookies.sessionId;
+    var newPostAuthor;
+
+    if (inputValidation.validateSessionId(sessionId).result) {
+      //cerca un utente che abbia quell'id
+      newPostAuthor = await dbQueries.findUserById(req.cookies.sessionId);
+    }
+
     if (newPostAuthor === undefined || newPostAuthor === null) {
       res.status(401).render('error', {
         statusCode: '401',
@@ -114,7 +120,14 @@ module.exports = function(app) {
 
   //aggiunge o toglie un like
   app.patch('/microblog/posts/:id/likes', async function(req, res) {
-    var user = await dbQueries.findUserById(req.cookies.sessionId);
+    var sessionId = req.cookies.sessionId;
+    var user;
+
+    if (inputValidation.validateSessionId(sessionId).result) {
+      //cerca un utente che abbia quell'id
+      user = await dbQueries.findUserById(req.cookies.sessionId);
+    }
+
     if (user === undefined || user === null) {
       res.status(401).render('error', {
         statusCode: '401',
@@ -141,7 +154,14 @@ module.exports = function(app) {
 
   //aggiunge un nuovo commento relativo ad un post dato il suo id
   app.post('/microblog/posts/:id/comments', async function(req, res) {
-    var newCommentAuthor = await dbQueries.findUserById(req.cookies.sessionId);
+    var sessionId = req.cookies.sessionId;
+    var newCommentAuthor;
+
+    if (inputValidation.validateSessionId(sessionId).result) {
+      //cerca un utente che abbia quell'id
+      newCommentAuthor = await dbQueries.findUserById(req.cookies.sessionId);
+    }
+
     if (newCommentAuthor === undefined || newCommentAuthor === null) {
       res.status(401).render('error', {
         statusCode: '401',
