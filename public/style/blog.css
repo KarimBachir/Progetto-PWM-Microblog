@@ -100,11 +100,13 @@ input, textarea {
 }
 
 #comments-section-container {
+  display: flex;
+  flex-direction: column;
   font-size: 20px;
   background-color: white;
   border: 4px solid rgb(0, 78, 121);
   border-radius: 5px;
-  height: fit-content;
+  height: 80%;
   width: 50%;
   margin: auto;
   margin-top: 60px;
@@ -116,7 +118,7 @@ input, textarea {
 }
 
 #comments {
-  height: 100vh;
+  border-top: 4px solid rgb(0, 78, 121);
   overflow-y: overlay;
   overflow-x: hidden;
 }
@@ -288,7 +290,7 @@ input, textarea {
   transform: scale(1.10);
 }
 
-.footer {
+#footer {
   position: -webkit-sticky;
   position: sticky;
 }

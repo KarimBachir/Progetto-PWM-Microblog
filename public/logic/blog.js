@@ -1,4 +1,11 @@
 $(document).ready(function() {
+  //imposta l'altezza corretta della sezione #blog
+  function setBlogHeight() {
+    var footerH = $('#footer').outerHeight(true);
+    var navBarH = $('#navBar').outerHeight(true);
+    $('#blog').height($(window).height() - footerH - navBarH);
+  };
+  $(window).on('resize load', setBlogHeight);
 
   //fa vibrare il messaggio a comparsa di allerta login necessario
   $('#loginNeededSection').on('click', function() {

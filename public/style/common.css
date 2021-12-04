@@ -3,6 +3,7 @@
 }
 
 body {
+  overflow: hidden;
   font-family: Arial;
   background: #f1f1f1;
   margin: 0;
@@ -18,7 +19,7 @@ button:hover {
   background-color: rgb(255, 255, 255);
 }
 
-.footer {
+#footer {
   z-index: 1;
   position: fixed;
   bottom: 0;
@@ -31,6 +32,6 @@ button:hover {
   text-align: center;
 }
 
-.footer h5 {
+#footer h5 {
   margin: 5px 10px 5px 10px;
 }
