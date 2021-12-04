@@ -68,6 +68,19 @@ module.exports = function(app) {
     //cerca un utente che abbia quell'id
     try {
       user = await dbQueries.findUserById(sessionId);
+      if (user === undefined || user === null) {
+        res.status(401).render('error', {
+          statusCode: '401',
+          message: "Devi effettuare l'accesso per accedere a questa pagina!"
+        });
+      } else {
+        var posts = await dbQueries.findAllPosts();
+        res.status(200).render('blog', {
+          status: '',
+          username: user.username,
+          posts: posts
+        });
+      }
     } catch (error) {
       res.status(401).render('error', {
         statusCode: '401',
@@ -75,19 +88,6 @@ module.exports = function(app) {
       });
     }
 
-    if (user === undefined || user === null) {
-      res.status(401).render('error', {
-        statusCode: '401',
-        message: "Devi effettuare l'accesso per accedere a questa pagina!"
-      });
-    } else {
-      var posts = await dbQueries.findAllPosts();
-      res.status(200).render('blog', {
-        status: '',
-        username: user.username,
-        posts: posts
-      });
-    }
   });
 
   //riceve un nuovo post, lo inserisce nel db e lo invia al client
