@@ -153,14 +153,19 @@ module.exports = function(app) {
     }
   });
 
-  //restituisce la pagina con i commenti di un post dato il suo id
+  //restituisce il template con i commenti di un post dato il suo id
   app.get('/microblog/posts/:id/comments', async function(req, res) {
     var comments = await dbQueries.findPostComments(req.params.id);
 
-    res.render('comments', {
-      comments: comments
-    });
-
+    if (comments === undefined || comments === null) {
+      res.sendStatus(400);
+    } else {
+      ejs.renderFile('./views/templates/commentsTemplate.ejs', {
+        comments: comments
+      }, function(err, data) {
+        res.status(200).send(data);
+      });
+    }
   });
 
   //aggiunge un nuovo commento relativo ad un post dato il suo id

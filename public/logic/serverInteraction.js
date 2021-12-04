@@ -74,6 +74,7 @@ $(document).ready(function() {
   $('#status').on('click', function() {
     $("#status").fadeOut('fast');
   });
+
   //login
   $('#loginButton').on('click', function() {
 
@@ -248,9 +249,8 @@ $(document).ready(function() {
       xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function(response) {
         if (this.readyState === 4 && this.status === 201) {
-          var iframe = document.getElementById('commentsIframe');
           //aggiunge il commento senza ricaricare la pagina
-          iframe.contentWindow.$("#comments").prepend(this.responseText);
+          $("#comments").prepend(this.responseText);
           //incrementa di 1 il counter dei commenti
           document.getElementById('commentCounter' + postId).innerHTML++;
 
@@ -287,5 +287,38 @@ $(document).ready(function() {
       }, 250);
     }
   });
+
+  //get lista commenti di un post
+  $('body').on('click', '.commentImg', function() {
+
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(response) {
+      if (this.readyState === 4 && this.status === 200) {
+        $('#comments-section-container').append(this.responseText);
+        //apre la sezione commenti del post
+        document.getElementById('newCommentPostId').setAttribute('value', postId);
+        document.getElementById("commentsSection").style.height = "100%";
+        //fa in modo che non si veda la scrollbar mentre si apre la tendina
+        setTimeout(function() {
+          document.getElementById("commentsSection").style.overflow = "overlay"
+        }, 500);
+      } else if (this.readyState === 4 && this.status === 400) {
+        document.getElementById("status").innerHTML = 'errore';
+        $("#status").fadeIn('fast');
+        $("#status").effect("shake", {
+          direction: "left",
+          times: 2,
+          distance: 10
+        }, 250);
+      }
+    };
+
+    var postId = $(this).parent().parent().attr('id');
+    var address = "/microblog/posts/" + postId + "/comments";
+    xhttp.open("GET", address);
+    xhttp.send();
+
+  });
+
 
 });

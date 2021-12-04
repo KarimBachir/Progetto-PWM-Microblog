@@ -30,24 +30,12 @@ $(document).ready(function() {
     document.getElementById("newPostSection").style.overflow = "hidden";
   });
 
-  //apre la sezione commenti del post
-  $('body').on('click', '.commentImg', function() {
-    var postId = $(this).parent().parent().attr('id');
-
-    document.getElementById('commentsIframe').setAttribute('src', "/microblog/posts/" + postId + '/comments');
-    document.getElementById('newCommentPostId').setAttribute('value', postId);
-    document.getElementById("commentsSection").style.height = "100%";
-    //fa in modo che non si veda la scrollbar mentre si apre la tendina
-    setTimeout(function() {
-      document.getElementById("commentsSection").style.overflow = "overlay"
-    }, 500);
-  });
-
   //chiude la sezione commenti del post
   $("#closeCommentsSectionButton").on('click', function() {
     $("#status").fadeOut('fast');
     document.getElementById("commentsSection").style.height = "0%";
     document.getElementById("commentsSection").style.overflow = "hidden";
+    document.getElementById("comments").remove();
   });
 
 });
