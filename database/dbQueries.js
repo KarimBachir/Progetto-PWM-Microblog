@@ -62,27 +62,29 @@ async function addPost(authorId, title, text, date) {
 }
 
 async function patchPostLikesByUserId(postId, userId) {
-  var likes = await findPostLikes(postId);
-  if (likes.includes(userId)) {
-    likes = likes.filter(likeUserId => likeUserId.toString() != userId.toString());
+  var post = await findPostById(postId);
+  var result = true;
+  if (post == null) {
+    result = false;
   } else {
-    likes.push(userId);
+    var likes = post.likes;
+    if (likes.includes(userId)) {
+      likes = likes.filter(likeUserId => likeUserId.toString() != userId.toString());
+    } else {
+      likes.push(userId);
+    }
+    await postModel.updateOne({
+      _id: postId
+    }, {
+      likes: likes
+    });
   }
-  await postModel.updateOne({
-    _id: postId
-  }, {
-    likes: likes
-  });
+  return result;
 }
 
 async function findPostById(id) {
   var output = await postModel.findById(id);
   return output;
-}
-
-async function findPostLikes(postId) {
-  var post = await postModel.findById(postId, 'likes');
-  return post.likes;
 }
 
 async function findPostComments(postId) {
@@ -129,7 +131,6 @@ module.exports = {
   patchPostLikesByUserId,
   findAllPosts,
   findPostById,
-  findPostLikes,
   findPostComments,
   addComment
 };

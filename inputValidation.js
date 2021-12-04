@@ -77,26 +77,8 @@ function validateNewComment(text) {
   return output;
 }
 
-function validateSessionId(sessionId) {
-  var output = {
-    result: false,
-    text: ''
-  };
-
-  //sessionId non settato
-  if (sessionId != undefined) {
-    //la query accetta stringhe da minimo 12 byte
-    if (Buffer.byteLength(sessionId, 'utf8') == 24) {
-      output.result = true;
-    }
-  }
-
-  return output;
-}
-
 module.exports = {
   validateSignin,
   validateNewPost,
   validateNewComment,
-  validateSessionId,
 };

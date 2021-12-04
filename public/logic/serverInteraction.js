@@ -185,6 +185,14 @@ $(document).ready(function() {
           likeImgElement.attr('src', '/public/img/liked.png');
           likeCounterElement.innerHTML++;
         }
+      } else if (this.readyState === 4 && this.status === 400) {
+        document.getElementById("status").innerHTML = 'errore';
+        $("#status").fadeIn('fast');
+        $("#status").effect("shake", {
+          direction: "left",
+          times: 2,
+          distance: 10
+        }, 250);
       } else if (this.readyState === 4 && this.status === 401) {
         document.getElementById("loginNeededSection").style.height = "100%";
       }

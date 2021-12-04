@@ -65,9 +65,14 @@ module.exports = function(app) {
     var sessionId = req.cookies.sessionId;
     var user;
 
-    if (inputValidation.validateSessionId(sessionId).result) {
-      //cerca un utente che abbia quell'id
+    //cerca un utente che abbia quell'id
+    try {
       user = await dbQueries.findUserById(sessionId);
+    } catch (error) {
+      res.status(401).render('error', {
+        statusCode: '401',
+        message: "Devi effettuare l'accesso per accedere a questa pagina!"
+      });
     }
 
     if (user === undefined || user === null) {
@@ -89,42 +94,47 @@ module.exports = function(app) {
   app.post('/microblog/posts', async function(req, res) {
     var sessionId = req.cookies.sessionId;
     var newPostAuthor;
-
-    if (inputValidation.validateSessionId(sessionId).result) {
+    try {
       //cerca un utente che abbia quell'id
       newPostAuthor = await dbQueries.findUserById(req.cookies.sessionId);
-    }
 
-    if (newPostAuthor === undefined || newPostAuthor === null) {
+      if (newPostAuthor === undefined || newPostAuthor === null) {
+        res.status(401).render('error', {
+          statusCode: '401',
+          message: "Devi effettuare l'accesso per accedere a questa pagina!"
+        });
+      } else {
+
+        var newPostTitle = req.body.title;
+        var newPostText = req.body.text;
+        var validation = inputValidation.validateNewPost(newPostTitle, newPostText);
+
+        if (validation.result) {
+          var newPostAuthorId = newPostAuthor._id;
+          const date = new Date();
+          var newPostFormattedDate = date.toLocaleString();
+          var newPost = await dbQueries.addPost(newPostAuthorId, newPostTitle, newPostText, newPostFormattedDate);
+
+          //renderizza il nuovo post e lo invia al client
+          ejs.renderFile('./views/templates/postTemplate.ejs', {
+            title: newPost.title,
+            text: newPost.text,
+            author: newPost.author.username,
+            date: newPost.date,
+            postId: newPost._id
+          }, function(err, data) {
+            res.status(201).send(data);
+          });
+        } else {
+          res.status(400).json(validation);
+        }
+      }
+
+    } catch (e) {
       res.status(401).render('error', {
         statusCode: '401',
         message: "Devi effettuare l'accesso per accedere a questa pagina!"
       });
-    } else {
-
-      var newPostTitle = req.body.title;
-      var newPostText = req.body.text;
-      var validation = inputValidation.validateNewPost(newPostTitle, newPostText);
-
-      if (validation.result) {
-        var newPostAuthorId = newPostAuthor._id;
-        const date = new Date();
-        var newPostFormattedDate = date.toLocaleString();
-        var newPost = await dbQueries.addPost(newPostAuthorId, newPostTitle, newPostText, newPostFormattedDate);
-
-        //renderizza il nuovo post e lo invia al client
-        ejs.renderFile('./views/templates/postTemplate.ejs', {
-          title: newPost.title,
-          text: newPost.text,
-          author: newPost.author.username,
-          date: newPost.date,
-          postId: newPost._id
-        }, function(err, data) {
-          res.status(201).send(data);
-        });
-      } else {
-        res.status(400).json(validation);
-      }
     }
 
   });
@@ -132,39 +142,50 @@ module.exports = function(app) {
   //aggiunge o toglie un like
   app.patch('/microblog/posts/:id/likes', async function(req, res) {
     var sessionId = req.cookies.sessionId;
+    var postId = req.params.id;
     var user;
-
-    if (inputValidation.validateSessionId(sessionId).result) {
+    try {
       //cerca un utente che abbia quell'id
       user = await dbQueries.findUserById(req.cookies.sessionId);
-    }
 
-    if (user === undefined || user === null) {
+      if (user === undefined || user === null) {} else {
+        var userId = user._id;
+        try {
+          var result = await dbQueries.patchPostLikesByUserId(postId, userId);
+          if (result) {
+            res.sendStatus(204);
+          } else {
+            res.sendStatus(400);
+          }
+        } catch (error) {
+          res.sendStatus(400);
+        }
+      }
+
+    } catch (e) {
       res.status(401).render('error', {
         statusCode: '401',
         message: "Devi effettuare l'accesso per accedere a questa pagina!"
       });
-    } else {
-      var userId = user._id;
-      var postId = req.params.id;
-      await dbQueries.patchPostLikesByUserId(postId, userId);
-
-      res.sendStatus(204);
     }
   });
 
   //restituisce il template con i commenti di un post dato il suo id
   app.get('/microblog/posts/:id/comments', async function(req, res) {
-    var comments = await dbQueries.findPostComments(req.params.id);
+    try {
+      var comments = await dbQueries.findPostComments(req.params.id);
+      if (comments === undefined || comments === null) {
+        res.sendStatus(400);
+      } else {
+        ejs.renderFile('./views/templates/commentsTemplate.ejs', {
+          comments: comments
+        }, function(err, data) {
+          res.status(200).send(data);
+        });
+      }
 
-    if (comments === undefined || comments === null) {
+    } catch (e) {
       res.sendStatus(400);
-    } else {
-      ejs.renderFile('./views/templates/commentsTemplate.ejs', {
-        comments: comments
-      }, function(err, data) {
-        res.status(200).send(data);
-      });
     }
   });
 
@@ -172,35 +193,44 @@ module.exports = function(app) {
   app.post('/microblog/posts/:id/comments', async function(req, res) {
     var sessionId = req.cookies.sessionId;
     var newCommentAuthor;
-
-    if (inputValidation.validateSessionId(sessionId).result) {
+    try {
       //cerca un utente che abbia quell'id
       newCommentAuthor = await dbQueries.findUserById(req.cookies.sessionId);
-    }
 
-    if (newCommentAuthor === undefined || newCommentAuthor === null) {
+      if (newCommentAuthor === undefined || newCommentAuthor === null) {
+        res.status(401).render('error', {
+          statusCode: '401',
+          message: "Devi effettuare l'accesso per accedere a questa pagina!"
+        });
+      } else {
+        var newCommentText = req.body.text;
+        var validation = inputValidation.validateNewComment(newCommentText);
+
+        if (validation.result) {
+          try {
+            var updatedPost = await dbQueries.addComment(req.params.id, newCommentAuthor._id, newCommentText);
+
+            //renderizza il nuovo commento e lo invia al client
+            ejs.renderFile('./views/templates/commentTemplate.ejs', {
+              author: updatedPost.comments[updatedPost.comments.length - 1].author.username,
+              text: updatedPost.comments[updatedPost.comments.length - 1].text,
+              date: updatedPost.comments[updatedPost.comments.length - 1].date,
+            }, function(err, data) {
+              res.status(201).send(data);
+            });
+          } catch (e) {
+            validation.text = 'errore';
+            res.status(400).json(validation);
+          }
+        } else {
+          res.status(400).json(validation);
+        }
+      }
+    } catch (e) {
       res.status(401).render('error', {
         statusCode: '401',
         message: "Devi effettuare l'accesso per accedere a questa pagina!"
       });
-    } else {
-      var newCommentText = req.body.text;
-      var validation = inputValidation.validateNewComment(newCommentText);
-
-      if (validation.result) {
-        var updatedPost = await dbQueries.addComment(req.params.id, newCommentAuthor._id, newCommentText);
-
-        //renderizza il nuovo commento e lo invia al client
-        ejs.renderFile('./views/templates/commentTemplate.ejs', {
-          author: updatedPost.comments[updatedPost.comments.length - 1].author.username,
-          text: updatedPost.comments[updatedPost.comments.length - 1].text,
-          date: updatedPost.comments[updatedPost.comments.length - 1].date,
-        }, function(err, data) {
-          res.status(201).send(data);
-        });
-      } else {
-        res.status(400).json(validation);
-      }
     }
   });
 
