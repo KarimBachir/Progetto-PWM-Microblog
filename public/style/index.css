@@ -55,7 +55,7 @@ body {
   cursor: pointer;
 }
 
-.tooltip .tooltiptext {
+.tooltiptext {
   cursor: auto;
   display: none;
   width: fit-content;

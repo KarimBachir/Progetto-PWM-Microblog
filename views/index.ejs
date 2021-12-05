@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="/public/style/common.css" />
     <link rel="stylesheet" type="text/css" href="/public/style/index.css" />
-    <script type="text/javascript" src="/public/logic/serverInteraction.js"></script>
-    <script type="text/javascript" src="/public/logic/index.js"></script>
+    <script src="/public/logic/serverInteraction.js"></script>
+    <script src="/public/logic/index.js"></script>
   </head>
 
   <body>
@@ -28,6 +28,7 @@
       <p>Se ti registrerai avrai la possibilità di pubblicare post, commentare e mettere like ai post che ti piaceranno.</p>
       <p>Se invece deciderai di non registrarti avrai comunque la possibilità di visualizzare i post degli utenti registrati e i relativi commenti ma non potrai crearne di nuovi, commentare o mettere like.</p>
     </div>
+
     <div id="page2">
 
       <div id="login">
@@ -46,30 +47,30 @@
         <label for="name">name</label>
         <input type="text" name="name" id="name" value="">
         <i class="tooltip bi bi-info-circle-fill">
-          <div class="tooltiptext">
-            Almeno 3 e massimo 16 caratteri
-          </div>
         </i>
+        <div class="tooltiptext">
+          Almeno 3 e massimo 16 caratteri
+        </div>
         <br>
 
         <label for="surname">surname</label>
         <input type="text" name="surname" id="surname" value="">
         <i class="tooltip bi bi-info-circle-fill">
-          <div class="tooltiptext">
-            Almeno 3 e massimo 16 caratteri
-          </div>
         </i>
+        <div class="tooltiptext">
+          Almeno 3 e massimo 16 caratteri
+        </div>
         <br>
 
         <label for="email">email</label>
         <input type="email" name="email" id="email" value="">
         <i class="tooltip bi bi-info-circle-fill">
-          <div class="tooltiptext">
-            Formato: ###@###
-            <hr>
-            Per maggiori informazioni: http://emailregex.com/
-          </div>
         </i>
+        <div class="tooltiptext">
+          Formato: ###@###
+          <hr>
+          Per maggiori informazioni: http://emailregex.com/
+        </div>
         <br>
 
         <label for="birthday">birthday</label>
@@ -78,29 +79,29 @@
         <label for="signinUsername">username</label>
         <input type="text" name="username" id="signinUsername" value="">
         <i class="tooltip bi bi-info-circle-fill">
-          <div class="tooltiptext">
-            Almeno 4 e massimo 16 caratteri, numeri o simboli (#?!@$%^&*-)
-          </div>
         </i>
+        <div class="tooltiptext">
+          Almeno 4 e massimo 16 caratteri, numeri o simboli (#?!@$%^&*-)
+        </div>
         <br>
 
         <label for="signinPassword">password</label>
         <input type="password" name="password" id="signinPassword" value="">
         <i class="tooltip bi bi-info-circle-fill">
-          <div class="tooltiptext">
-            Minimo 8 e massimo 20 caratteri
-            <hr>
-            Almeno una maiuscola
-            <hr>
-            Almeno una minuscola
-            <hr>
-            Almeno un numero
-            <hr>
-            Almeno un simbolo tra #?!@$%^&*-
-            <hr>
-            Nessuno spazio
-          </div>
         </i>
+        <div class="tooltiptext">
+          Minimo 8 e massimo 20 caratteri
+          <hr>
+          Almeno una maiuscola
+          <hr>
+          Almeno una minuscola
+          <hr>
+          Almeno un numero
+          <hr>
+          Almeno un simbolo tra #?!@$%^&*-
+          <hr>
+          Nessuno spazio
+        </div>
         <br>
 
         <button type="submit" name="signIn" id="signInButton">signIn</button>
@@ -110,6 +111,7 @@
         <p> <%= status %></p>
       </div>
     </div>
+
     <div id="footer">
       <h5>PWM Microblog</h5>
       <h5>2020/2021</h5>

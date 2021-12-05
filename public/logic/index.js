@@ -18,7 +18,7 @@ function checkPage2Content() {
 
 $(document).ready(function() {
   $(".tooltip").hover(function() {
-    $(this).children(":first").fadeToggle("fast").css("display", "inline-block");
+    $(this).next("div").fadeToggle("fast").css("display", "inline-block");
   });
   //fa apparire o sparire il form di login alla pressione del tasto accedi
   $("#action > a").on('click', async function triggerLoginForm() {
