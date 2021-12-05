@@ -15,12 +15,7 @@ module.exports = function(app) {
 
   app.get('/microblog/guest', async function(req, res) {
     res.clearCookie('sessionId');
-    var posts = await dbQueries.findAllPosts();
-    res.status(200).render('blog', {
-      status: '',
-      username: 'Guest',
-      posts: posts
-    });
+    res.redirect('/microblog/blog')
   });
 
   app.post('/microblog/login', async function(req, res) {
@@ -63,31 +58,39 @@ module.exports = function(app) {
 
   app.get('/microblog/blog', async function(req, res) {
     var sessionId = req.cookies.sessionId;
-    var user;
-
-    //cerca un utente che abbia quell'id
-    try {
-      user = await dbQueries.findUserById(sessionId);
-      if (user === undefined || user === null) {
+    var user, posts;
+    //guest
+    if (sessionId == undefined) {
+      posts = await dbQueries.findAllPosts();
+      res.status(200).render('blog', {
+        status: '',
+        username: 'Guest',
+        posts: posts
+      });
+    } else {
+      //cerca un utente che abbia quell'id
+      try {
+        user = await dbQueries.findUserById(sessionId);
+        if (user === undefined || user === null) {
+          res.status(401).render('error', {
+            statusCode: '401',
+            message: "Devi effettuare l'accesso per accedere a questa pagina!"
+          });
+        } else {
+          posts = await dbQueries.findAllPosts();
+          res.status(200).render('blog', {
+            status: '',
+            username: user.username,
+            posts: posts
+          });
+        }
+      } catch (error) {
         res.status(401).render('error', {
           statusCode: '401',
           message: "Devi effettuare l'accesso per accedere a questa pagina!"
         });
-      } else {
-        var posts = await dbQueries.findAllPosts();
-        res.status(200).render('blog', {
-          status: '',
-          username: user.username,
-          posts: posts
-        });
       }
-    } catch (error) {
-      res.status(401).render('error', {
-        statusCode: '401',
-        message: "Devi effettuare l'accesso per accedere a questa pagina!"
-      });
     }
-
   });
 
   //riceve un nuovo post, lo inserisce nel db e lo invia al client
@@ -148,21 +151,27 @@ module.exports = function(app) {
       //cerca un utente che abbia quell'id
       user = await dbQueries.findUserById(req.cookies.sessionId);
 
-      if (user === undefined || user === null) {} else {
+      //id utente valido ma insesistente
+      if (user === undefined || user === null) {
+        res.status(401).render('error', {
+          statusCode: '401',
+          message: "Devi effettuare l'accesso per accedere a questa pagina!"
+        });
+      } else {
         var userId = user._id;
         try {
           var result = await dbQueries.patchPostLikesByUserId(postId, userId);
           if (result) {
             res.sendStatus(204);
-          } else {
+          } else { //id del post valido ma non esistente
             res.sendStatus(400);
           }
-        } catch (error) {
+        } catch (error) { //id del post non valido
           res.sendStatus(400);
         }
       }
 
-    } catch (e) {
+    } catch (e) { //id utente non valido
       res.status(401).render('error', {
         statusCode: '401',
         message: "Devi effettuare l'accesso per accedere a questa pagina!"
