@@ -17,7 +17,7 @@
 
   <body>
     <!-- sezione di avviso login necessario a comparsa comparsa/scomparsa -->
-    <div id="loginNeededSection" class="fullscreenSection">
+    <div class="fullscreenSection" id="loginNeededSection">
       <!-- Modal content -->
       <a class="closebtn" id="closeLoginNeededSectionButton">&times;</a>
       <div id="loginNeededContainer">
@@ -25,9 +25,11 @@
       </div>
     </div>
 
+    <!-- sezione di avviso errore a comparsa/scomparsa -->
     <div id="status">
       <p> <%= status %></p>
     </div>
+
     <!-- sezione dei post a comparsa/scomparsa -->
     <div class="fullscreenSection" id="newPostSection">
       <a class="closebtn" id="closeNewPostSectionButton">&times;</a>
@@ -62,6 +64,7 @@
       <a id="logoutButton" href="/microblog/logout"><i class="bi bi-door-closed-fill"></i> Logout</a>
     </div>
 
+    <!-- sezione dei post -->
     <div id="blog">
       <div id="header">
         <h1>Ciao <%= username %> e benvenuto nel blog!</h1>
@@ -97,7 +100,7 @@
             <!-- icona commenti -->
             <div class="post-iconbar-item">
 
-              <img class="commentImg post-interaction-img" src="http://127.0.0.1:3000/public/img/comment.png" alt="comment">
+              <img class="commentImg post-interaction-img" src="/public/img/comment.png" alt="comment">
 
             </div>
             <!-- numero di commenti -->
