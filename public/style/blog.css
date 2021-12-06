@@ -1,10 +1,6 @@
 #header {
   text-align: center;
-}
-
-#header h1 {
-  text-align: center;
-  margin: 20px 0 20px 0;
+  padding: 20px 0 20px 0;
 }
 
 #navBar {
@@ -12,7 +8,6 @@
   position: sticky;
   top: 0;
   z-index: 1;
-  width: 100%;
   display: grid;
   grid-template-columns: 30% 40% 30%;
   overflow: hidden;
@@ -45,7 +40,6 @@
   border-top: none;
   border-bottom: none;
   padding: 0% 24% 0% 24%;
-  width: 100%;
   overflow: overlay;
 }
 
@@ -123,14 +117,6 @@ input, textarea {
   overflow-x: hidden;
 }
 
-#commentsIframe {
-  display: block;
-  border: none;
-  border-top: 4px solid rgb(0, 78, 121);
-  width: 100%;
-  height: 55vh;
-}
-
 .comment-container {
   display: grid;
   grid-template-columns: 50% 1fr;
@@ -188,19 +174,10 @@ input, textarea {
 }
 
 #status {
-  display: none;
   position: absolute;
   z-index: 4;
   top: 20px;
   left: 20px;
-  width: -moz-fit-content;
-  width: fit-content;
-  background-color: #d90000;
-  border-left: 5px solid rgb(0, 78, 121);
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  color: white;
-  padding: 10px;
 }
 
 .closebtn {
@@ -235,7 +212,11 @@ input, textarea {
 
 .post>p {
   max-height: 300px;
-  overflow: auto;
+  overflow-x: hidden;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  font-size: 120%;
 }
 
 .post-footer-container {
@@ -245,7 +226,7 @@ input, textarea {
 
 .post-footer-item {
   font-weight: bold;
-  font-size: 11px;
+  font-size: 80%;
 }
 
 .author {
@@ -279,7 +260,6 @@ input, textarea {
 }
 
 .post-interaction-img {
-  height: auto;
   width: 50px;
   border-radius: 6px;
   transition: all 0.15s ease;
@@ -288,9 +268,4 @@ input, textarea {
 
 .post-interaction-img:hover, .closebtn:hover {
   transform: scale(1.10);
-}
-
-#footer {
-  position: -webkit-sticky;
-  position: sticky;
 }
