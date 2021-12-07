@@ -3,47 +3,41 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 };
 
-//imposta la larghezza della sezione a sinistra della home
-function setPage1Width(width) {
-  $("#page1").css('width', width);
-};
-
 //se il form di login e il form di signin non sono visibili allora imposta la larghezza della sezione a sinistra della home su 100%
 function checkPage2Content() {
   if ($("#login").css('display') === 'none' && $("#signin").css('display') === 'none') {
     document.getElementById("status").innerHTML = '';
-    setPage1Width('100%');
+    $("#page1").css('width', '100%');
   }
+};
+//nasconde il primo form e fa apparire/sparire il secondo, successivamente verifica la visibilità dei due form
+function toggleForm(id1, id2) {
+  $("#" + id1).fadeOut('fast', function() {
+    $("#" + id2).fadeToggle('fast', function() {
+      checkPage2Content()
+    });
+  });
 };
 
 $(document).ready(function() {
+  //permette di visualizzare i requisiti del campo passando con il mouse sopra all'icona
   $(".tooltip").hover(function() {
     $(this).next("div").fadeToggle("fast").css("display", "inline-block");
   });
-  //fa apparire o sparire il form di login alla pressione del tasto accedi
+
+  //alla pressione del pulsante accedi o registrati visualizza o nasconde il form corrispondente
   $("#action > a").on('click', async function triggerLoginForm() {
     $("#status").fadeOut('fast');
-    //se la larghezza della sezione a sinistra della home è 100% allora la imposta a 50%
-    if ($("#page1").css('width') === $(window).width() + 'px') {
-      setPage1Width('50%');
+    //se la larghezza della sezione a sinistra della home è maggiore del 50% allora la imposta su 50%
+    if (parseInt($("#page1").css('width')) > ($(window).width() / 2)) {
+      $("#page1").css('width', '50%');
       await sleep(600);
     }
-
+    //verifica quale dei due pulsanti è stato cliccato
     if (this.getAttribute('id') === 'triggerLoginFormButton') {
-      //nasconde il form di signin e fa apparire-sparire quello di login, successivamente verifica la visibilità dei due form
-      $("#signin").fadeOut('fast', function() {
-        $("#login").fadeToggle('fast', function() {
-          checkPage2Content()
-        });
-      });
+      toggleForm("signin", "login");
     } else if (this.getAttribute('id') === 'triggerSigninFormButton') {
-      //nasconde il form di login e fa apparire-sparire quello di signin, successivamente verifica la visibilità dei due form
-      $("#login").fadeOut('fast', function() {
-        $("#signin").fadeToggle('fast', function() {
-          checkPage2Content()
-        });
-      });
+      toggleForm("login", "signin");
     }
   });
-
 });
