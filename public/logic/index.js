@@ -10,6 +10,7 @@ function checkPage2Content() {
     $("#page1").css('width', '100%');
   }
 };
+
 //nasconde il primo form e fa apparire/sparire il secondo, successivamente verifica la visibilità dei due form
 function toggleForm(id1, id2) {
   $("#" + id1).fadeOut('fast', function() {
@@ -20,6 +21,21 @@ function toggleForm(id1, id2) {
 };
 
 $(document).ready(function() {
+  //quando l'evento open avviene il div status appare
+  $('#status').bind('open', function() {
+    $("#status").fadeIn('fast');
+    $("#status").effect("shake", {
+      direction: "left",
+      times: 2,
+      distance: 10
+    }, 250);
+  });
+
+  //fa scomparire il div status al click su di esso
+  $('#status').on('click', function() {
+    $("#status").fadeOut('fast');
+  });
+
   //permette di visualizzare i requisiti del campo passando con il mouse sopra all'icona
   $(".tooltip").hover(function() {
     $(this).next("div").fadeToggle("fast").css("display", "inline-block");

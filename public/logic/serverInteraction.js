@@ -71,13 +71,8 @@ function validateNewComment(text) {
   return output;
 }
 $(document).ready(function() {
-  $('#status').on('click', function() {
-    $("#status").fadeOut('fast');
-  });
-
   //login
   $('#loginButton').on('click', function() {
-
     xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function(response) {
       if (this.readyState === 4 && this.status === 200) {
@@ -85,12 +80,7 @@ $(document).ready(function() {
       } else if (this.readyState === 4 && this.status === 404) {
         document.getElementById("status").innerHTML =
           'utente non trovato!';
-        $("#status").fadeIn('fast');
-        $("#status").effect("shake", {
-          direction: "left",
-          times: 2,
-          distance: 10
-        }, 250);
+        $("#status").trigger('open');
       }
     };
 
@@ -131,12 +121,7 @@ $(document).ready(function() {
         } else if (this.readyState === 4 && this.status === 400) {
           document.getElementById("status").innerHTML =
             JSON.parse(this.responseText).text;
-          $("#status").fadeIn('fast');
-          $("#status").effect("shake", {
-            direction: "left",
-            times: 2,
-            distance: 10
-          }, 250);
+          $("#status").trigger('open');
         }
       };
 
@@ -155,12 +140,7 @@ $(document).ready(function() {
 
     } else {
       document.getElementById("status").innerHTML = validation.text;
-      $("#status").fadeIn('fast');
-      $("#status").effect("shake", {
-        direction: "left",
-        times: 2,
-        distance: 10
-      }, 250);
+      $("#status").trigger('open');
     }
   });
 
@@ -187,14 +167,9 @@ $(document).ready(function() {
         }
       } else if (this.readyState === 4 && this.status === 400) {
         document.getElementById("status").innerHTML = 'errore';
-        $("#status").fadeIn('fast');
-        $("#status").effect("shake", {
-          direction: "left",
-          times: 2,
-          distance: 10
-        }, 250);
+        $("#status").trigger('open');
       } else if (this.readyState === 4 && this.status === 401) {
-        document.getElementById("loginNeededSection").style.height = "100%";
+        $('#loginNeededSection').trigger('open');
       }
     };
 
@@ -219,14 +194,9 @@ $(document).ready(function() {
           $("#closeNewPostSectionButton").trigger("click");
         } else if (this.readyState === 4 && this.status === 400) {
           document.getElementById("status").innerHTML = JSON.parse(this.responseText).text;
-          $("#status").fadeIn('fast');
-          $("#status").effect("shake", {
-            direction: "left",
-            times: 2,
-            distance: 10
-          }, 250);
+          $("#status").trigger('open');
         } else if (this.readyState === 4 && this.status === 401) {
-          document.getElementById("loginNeededSection").style.height = "100%";
+          $('#loginNeededSection').trigger('open');
         }
       }
       var newPost = {
@@ -240,12 +210,7 @@ $(document).ready(function() {
       xhttp.send(JSON.stringify(newPost));
     } else {
       document.getElementById("status").innerHTML = validation.text;
-      $("#status").fadeIn('fast');
-      $("#status").effect("shake", {
-        direction: "left",
-        times: 2,
-        distance: 10
-      }, 250);
+      $("#status").trigger('open');
     }
   });
 
@@ -264,15 +229,10 @@ $(document).ready(function() {
 
         } else if (this.readyState === 4 && this.status === 400) {
           document.getElementById("status").innerHTML = JSON.parse(this.responseText).text;
-          $("#status").fadeIn('fast');
-          $("#status").effect("shake", {
-            direction: "left",
-            times: 2,
-            distance: 10
-          }, 250);
+          $("#status").trigger('open');
 
         } else if (this.readyState === 4 && this.status === 401) {
-          document.getElementById("loginNeededSection").style.height = "100%";
+          $('#loginNeededSection').trigger('open');
         }
       };
 
@@ -287,37 +247,23 @@ $(document).ready(function() {
 
     } else {
       document.getElementById("status").innerHTML = validation.text;
-      $("#status").fadeIn('fast');
-      $("#status").effect("shake", {
-        direction: "left",
-        times: 2,
-        distance: 10
-      }, 250);
+      $("#status").trigger('open');
     }
   });
 
-  //get lista commenti di un post
+  //ottiene la lista dei commenti di un post e apre la sezione corrispondente
   $('body').on('click', '.commentImg', function() {
 
     xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function(response) {
       if (this.readyState === 4 && this.status === 200) {
         $('#comments-section-container').append(this.responseText);
-        //apre la sezione commenti del post
         document.getElementById('newCommentPostId').setAttribute('value', postId);
+        //apre la sezione commenti del post
         document.getElementById("commentsSection").style.height = "100%";
-        //fa in modo che non si veda la scrollbar mentre si apre la tendina
-        setTimeout(function() {
-          document.getElementById("commentsSection").style.overflow = "overlay"
-        }, 500);
       } else if (this.readyState === 4 && this.status === 400) {
         document.getElementById("status").innerHTML = 'errore';
-        $("#status").fadeIn('fast');
-        $("#status").effect("shake", {
-          direction: "left",
-          times: 2,
-          distance: 10
-        }, 250);
+        $("#status").trigger('open');
       }
     };
 
@@ -325,8 +271,5 @@ $(document).ready(function() {
     var address = "/microblog/posts/" + postId + "/comments";
     xhttp.open("GET", address);
     xhttp.send();
-
   });
-
-
 });
