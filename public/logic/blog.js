@@ -3,7 +3,7 @@ function setBlogHeight() {
   var footerH = $('#footer').outerHeight(true);
   var navBarH = $('#navBar').outerHeight(true);
   $('#blog').height($(window).height() - footerH - navBarH);
-};
+}
 
 $(document).ready(function() {
   $(window).on('resize load', setBlogHeight);

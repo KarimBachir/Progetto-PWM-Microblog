@@ -8,7 +8,6 @@ module.exports = function(app) {
   app.get('/microblog', function(req, res) {
     var date = new Date();
     res.render('index', {
-      status: '',
       today: date.toISOString().substring(0, 10) //serve per limitare il campo birthday nel form di signin
     });
   });
@@ -63,7 +62,6 @@ module.exports = function(app) {
     if (sessionId == undefined) {
       posts = await dbQueries.findAllPosts();
       res.status(200).render('blog', {
-        status: '',
         username: 'Guest',
         posts: posts
       });
@@ -79,7 +77,6 @@ module.exports = function(app) {
         } else {
           posts = await dbQueries.findAllPosts();
           res.status(200).render('blog', {
-            status: '',
             username: user.username,
             posts: posts
           });

@@ -78,8 +78,7 @@ $(document).ready(function() {
       if (this.readyState === 4 && this.status === 200) {
         location.assign('/microblog/blog');
       } else if (this.readyState === 4 && this.status === 404) {
-        document.getElementById("status").innerHTML =
-          'utente non trovato!';
+        $('#status').text('utente non trovato!');
         $("#status").trigger('open');
       }
     };
@@ -119,8 +118,7 @@ $(document).ready(function() {
           location.assign('/microblog/blog');
 
         } else if (this.readyState === 4 && this.status === 400) {
-          document.getElementById("status").innerHTML =
-            JSON.parse(this.responseText).text;
+          $('#status').text(JSON.parse(this.responseText).text);
           $("#status").trigger('open');
         }
       };
@@ -139,7 +137,7 @@ $(document).ready(function() {
       xhttp.send(JSON.stringify(user));
 
     } else {
-      document.getElementById("status").innerHTML = validation.text;
+      $('#status').text(validation.text);
       $("#status").trigger('open');
     }
   });
@@ -166,7 +164,7 @@ $(document).ready(function() {
           likeCounterElement.innerHTML++;
         }
       } else if (this.readyState === 4 && this.status === 400) {
-        document.getElementById("status").innerHTML = 'errore';
+        $('#status').text('errore');
         $("#status").trigger('open');
       } else if (this.readyState === 4 && this.status === 401) {
         $('#loginNeededSection').trigger('open');
@@ -193,12 +191,12 @@ $(document).ready(function() {
           //chiude il form
           $("#closeNewPostSectionButton").trigger("click");
         } else if (this.readyState === 4 && this.status === 400) {
-          document.getElementById("status").innerHTML = JSON.parse(this.responseText).text;
+          $('#status').text(JSON.parse(this.responseText).text);
           $("#status").trigger('open');
         } else if (this.readyState === 4 && this.status === 401) {
           $('#loginNeededSection').trigger('open');
         }
-      }
+      };
       var newPost = {
         title: title,
         text: text
@@ -209,9 +207,31 @@ $(document).ready(function() {
       xhttp.setRequestHeader("Content-type", "application/json");
       xhttp.send(JSON.stringify(newPost));
     } else {
-      document.getElementById("status").innerHTML = validation.text;
+      $('#status').text(validation.text);
       $("#status").trigger('open');
     }
+  });
+
+  //ottiene la lista dei commenti di un post e apre la sezione corrispondente
+  $('body').on('click', '.commentImg', function() {
+
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(response) {
+      if (this.readyState === 4 && this.status === 200) {
+        $('#comments-section-container').append(this.responseText);
+        document.getElementById('newCommentPostId').setAttribute('value', postId);
+        //apre la sezione commenti del post
+        document.getElementById("commentsSection").style.height = "100%";
+      } else if (this.readyState === 4 && this.status === 400) {
+        $('#status').text('errore');
+        $("#status").trigger('open');
+      }
+    };
+
+    var postId = $(this).parent().parent().attr('id');
+    var address = "/microblog/posts/" + postId + "/comments";
+    xhttp.open("GET", address);
+    xhttp.send();
   });
 
   //nuovo commento
@@ -228,7 +248,7 @@ $(document).ready(function() {
           document.getElementById('commentCounter' + postId).innerHTML++;
 
         } else if (this.readyState === 4 && this.status === 400) {
-          document.getElementById("status").innerHTML = JSON.parse(this.responseText).text;
+          $('#status').text(JSON.parse(this.responseText).text);
           $("#status").trigger('open');
 
         } else if (this.readyState === 4 && this.status === 401) {
@@ -246,30 +266,8 @@ $(document).ready(function() {
       xhttp.send(JSON.stringify(newComment));
 
     } else {
-      document.getElementById("status").innerHTML = validation.text;
+      $('#status').text(validation.text);
       $("#status").trigger('open');
     }
-  });
-
-  //ottiene la lista dei commenti di un post e apre la sezione corrispondente
-  $('body').on('click', '.commentImg', function() {
-
-    xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function(response) {
-      if (this.readyState === 4 && this.status === 200) {
-        $('#comments-section-container').append(this.responseText);
-        document.getElementById('newCommentPostId').setAttribute('value', postId);
-        //apre la sezione commenti del post
-        document.getElementById("commentsSection").style.height = "100%";
-      } else if (this.readyState === 4 && this.status === 400) {
-        document.getElementById("status").innerHTML = 'errore';
-        $("#status").trigger('open');
-      }
-    };
-
-    var postId = $(this).parent().parent().attr('id');
-    var address = "/microblog/posts/" + postId + "/comments";
-    xhttp.open("GET", address);
-    xhttp.send();
   });
 });

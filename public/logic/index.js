@@ -1,7 +1,7 @@
 //funzione wait
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
-};
+}
 
 //se il form di login e il form di signin non sono visibili allora imposta la larghezza della sezione a sinistra della home su 100%
 function checkPage2Content() {
@@ -9,16 +9,16 @@ function checkPage2Content() {
     document.getElementById("status").innerHTML = '';
     $("#page1").css('width', '100%');
   }
-};
+}
 
 //nasconde il primo form e fa apparire/sparire il secondo, successivamente verifica la visibilità dei due form
 function toggleForm(id1, id2) {
   $("#" + id1).fadeOut('fast', function() {
     $("#" + id2).fadeToggle('fast', function() {
-      checkPage2Content()
+      checkPage2Content();
     });
   });
-};
+}
 
 $(document).ready(function() {
   //quando l'evento open avviene il div status appare
