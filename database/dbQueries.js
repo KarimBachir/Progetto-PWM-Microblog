@@ -1,4 +1,3 @@
-var mongoose = require('mongoose');
 var userModel = require('../models/userModel');
 var postModel = require('../models/postModel');
 

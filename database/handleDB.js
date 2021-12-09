@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-module.exports = function(app) {
+module.exports = function() {
   mongoose.connection.on('error', function(err) {
     console.log('<- Errore del database: \n' + err);
   });
@@ -21,4 +21,4 @@ module.exports = function(app) {
     function(err) {
       if (err) console.log("<- Impossibile connettersi al database: " + err);
     });
-}
+};

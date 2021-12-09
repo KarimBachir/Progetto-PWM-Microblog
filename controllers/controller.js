@@ -14,7 +14,7 @@ module.exports = function(app) {
 
   app.get('/microblog/guest', async function(req, res) {
     res.clearCookie('sessionId');
-    res.redirect('/microblog/blog')
+    res.redirect('/microblog/blog');
   });
 
   app.post('/microblog/login', async function(req, res) {
@@ -96,7 +96,7 @@ module.exports = function(app) {
     var newPostAuthor;
     try {
       //cerca un utente che abbia quell'id
-      newPostAuthor = await dbQueries.findUserById(req.cookies.sessionId);
+      newPostAuthor = await dbQueries.findUserById(sessionId);
 
       if (newPostAuthor === undefined || newPostAuthor === null) {
         res.status(401).render('error', {
@@ -146,7 +146,7 @@ module.exports = function(app) {
     var user;
     try {
       //cerca un utente che abbia quell'id
-      user = await dbQueries.findUserById(req.cookies.sessionId);
+      user = await dbQueries.findUserById(sessionId);
 
       //id utente valido ma insesistente
       if (user === undefined || user === null) {
@@ -201,7 +201,7 @@ module.exports = function(app) {
     var newCommentAuthor;
     try {
       //cerca un utente che abbia quell'id
-      newCommentAuthor = await dbQueries.findUserById(req.cookies.sessionId);
+      newCommentAuthor = await dbQueries.findUserById(sessionId);
 
       if (newCommentAuthor === undefined || newCommentAuthor === null) {
         res.status(401).render('error', {
