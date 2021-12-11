@@ -2,7 +2,6 @@ var dbQueries = require('../database/dbQueries');
 var inputValidation = require('../inputValidation');
 var ejs = require('ejs');
 
-//connessione al database
 module.exports = function(app) {
 
   app.get('/microblog', function(req, res) {

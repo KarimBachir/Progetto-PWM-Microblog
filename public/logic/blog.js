@@ -17,6 +17,11 @@ $(document).ready(function() {
     }, 250);
   });
 
+  $('#logoutButton').on('click', function() {
+    sessionStorage.clear();
+    window.location.href = "/microblog/logout";
+  });
+
   //fa scomparire il div status al click su di esso
   $('#status').on('click', function() {
     $("#status").fadeOut('fast');
