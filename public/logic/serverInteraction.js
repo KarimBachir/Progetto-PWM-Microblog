@@ -96,7 +96,7 @@ function validateNewComment(text) {
 }
 
 $(document).ready(function() {
-  $('#page').fadeIn();
+  $('#page').fadeIn(700);
   var sendDataWorker;
   var checkServerOn = false;
   var checkServerWorker;
