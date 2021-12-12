@@ -16,101 +16,104 @@
   </head>
 
   <body>
-    <div id="page1">
-      <h1>Benvenuto nel microblog di Karim Bachir!</h1>
-      <hr>
-      <p>Scegli cosa fare:</p>
-      <div id="action">
-        <a id="triggerLoginFormButton"><i class="bi bi-door-open-fill"></i> Accedi</a>
-        <a id="triggerSigninFormButton"><i class="bi bi-person-plus-fill"></i> Registrati</a>
+    <div id="page">
+
+      <div id="page1">
+        <h1>Benvenuto nel microblog di Karim Bachir!</h1>
+        <hr>
+        <p>Scegli cosa fare:</p>
+        <div id="action">
+          <a id="triggerLoginFormButton"><i class="bi bi-door-open-fill"></i> Accedi</a>
+          <a id="triggerSigninFormButton"><i class="bi bi-person-plus-fill"></i> Registrati</a>
+        </div>
+        <a id="guestButton"><i class="bi bi-person"></i> Accedi come guest</a>
+        <p>Se ti registrerai avrai la possibilità di pubblicare post, commentare e mettere like ai post che ti piaceranno.</p>
+        <p>Se invece deciderai di non registrarti avrai comunque la possibilità di visualizzare i post degli utenti registrati e i relativi commenti ma non potrai crearne di nuovi, commentare o mettere like.</p>
       </div>
-      <a href="/microblog/guest"><i class="bi bi-person"></i> Accedi come guest</a>
-      <p>Se ti registrerai avrai la possibilità di pubblicare post, commentare e mettere like ai post che ti piaceranno.</p>
-      <p>Se invece deciderai di non registrarti avrai comunque la possibilità di visualizzare i post degli utenti registrati e i relativi commenti ma non potrai crearne di nuovi, commentare o mettere like.</p>
+
+      <div id="page2">
+
+        <div id="login">
+          <h2>Compila i campi:</h2>
+          <label for="loginUsername">username</label>
+          <input type="text" name="username" id="loginUsername" value="">
+          <br>
+          <label for="loginPassword">password</label>
+          <input type="password" name="password" id="loginPassword" value="">
+          <br>
+          <button type="submit" name="login" id="loginButton">Login</button>
+        </div>
+
+        <div id="signin">
+          <h2>Compila i campi:</h2>
+          <label for="name">name</label>
+          <input type="text" name="name" id="name" value="">
+          <i class="tooltip bi bi-info-circle-fill">
+          </i>
+          <div class="tooltiptext">
+            Almeno 3 e massimo 16 caratteri
+          </div>
+          <br>
+
+          <label for="surname">surname</label>
+          <input type="text" name="surname" id="surname" value="">
+          <i class="tooltip bi bi-info-circle-fill">
+          </i>
+          <div class="tooltiptext">
+            Almeno 3 e massimo 16 caratteri
+          </div>
+          <br>
+
+          <label for="email">email</label>
+          <input type="email" name="email" id="email" value="">
+          <i class="tooltip bi bi-info-circle-fill">
+          </i>
+          <div class="tooltiptext">
+            Formato: ###@###
+            <hr>
+            Per maggiori informazioni: http://emailregex.com/
+          </div>
+          <br>
+
+          <label for="birthday">birthday</label>
+          <input type="date" id="birthday" name="birthday" min="1900-01-01" max=<%= today %>><br>
+
+          <label for="signinUsername">username</label>
+          <input type="text" name="username" id="signinUsername" value="">
+          <i class="tooltip bi bi-info-circle-fill">
+          </i>
+          <div class="tooltiptext">
+            Almeno 4 e massimo 16 caratteri, numeri o simboli (#?!@$%^&*-)
+          </div>
+          <br>
+
+          <label for="signinPassword">password</label>
+          <input type="password" name="password" id="signinPassword" value="">
+          <i class="tooltip bi bi-info-circle-fill">
+          </i>
+          <div class="tooltiptext">
+            Minimo 8 e massimo 20 caratteri
+            <hr>
+            Almeno una maiuscola
+            <hr>
+            Almeno una minuscola
+            <hr>
+            Almeno un numero
+            <hr>
+            Almeno un simbolo tra #?!@$%^&*-
+            <hr>
+            Nessuno spazio
+          </div>
+          <br>
+
+          <button type="submit" name="signIn" id="signInButton">signIn</button>
+        </div>
+        <br>
+        <div id="status">
+        </div>
+      </div>
+
     </div>
-
-    <div id="page2">
-
-      <div id="login">
-        <h2>Compila i campi:</h2>
-        <label for="loginUsername">username</label>
-        <input type="text" name="username" id="loginUsername" value="">
-        <br>
-        <label for="loginPassword">password</label>
-        <input type="password" name="password" id="loginPassword" value="">
-        <br>
-        <button type="submit" name="login" id="loginButton">Login</button>
-      </div>
-
-      <div id="signin">
-        <h2>Compila i campi:</h2>
-        <label for="name">name</label>
-        <input type="text" name="name" id="name" value="">
-        <i class="tooltip bi bi-info-circle-fill">
-        </i>
-        <div class="tooltiptext">
-          Almeno 3 e massimo 16 caratteri
-        </div>
-        <br>
-
-        <label for="surname">surname</label>
-        <input type="text" name="surname" id="surname" value="">
-        <i class="tooltip bi bi-info-circle-fill">
-        </i>
-        <div class="tooltiptext">
-          Almeno 3 e massimo 16 caratteri
-        </div>
-        <br>
-
-        <label for="email">email</label>
-        <input type="email" name="email" id="email" value="">
-        <i class="tooltip bi bi-info-circle-fill">
-        </i>
-        <div class="tooltiptext">
-          Formato: ###@###
-          <hr>
-          Per maggiori informazioni: http://emailregex.com/
-        </div>
-        <br>
-
-        <label for="birthday">birthday</label>
-        <input type="date" id="birthday" name="birthday" min="1900-01-01" max=<%= today %>><br>
-
-        <label for="signinUsername">username</label>
-        <input type="text" name="username" id="signinUsername" value="">
-        <i class="tooltip bi bi-info-circle-fill">
-        </i>
-        <div class="tooltiptext">
-          Almeno 4 e massimo 16 caratteri, numeri o simboli (#?!@$%^&*-)
-        </div>
-        <br>
-
-        <label for="signinPassword">password</label>
-        <input type="password" name="password" id="signinPassword" value="">
-        <i class="tooltip bi bi-info-circle-fill">
-        </i>
-        <div class="tooltiptext">
-          Minimo 8 e massimo 20 caratteri
-          <hr>
-          Almeno una maiuscola
-          <hr>
-          Almeno una minuscola
-          <hr>
-          Almeno un numero
-          <hr>
-          Almeno un simbolo tra #?!@$%^&*-
-          <hr>
-          Nessuno spazio
-        </div>
-        <br>
-
-        <button type="submit" name="signIn" id="signInButton">signIn</button>
-      </div>
-      <br>
-      <div id="status">
-      </div>
-    </div>
-
     <div id="footer">
       <h5 class="footerElement">PWM Microblog</h5>
       <h5 class="footerElement">2020/2021</h5>

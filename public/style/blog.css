@@ -62,8 +62,7 @@ input, textarea {
 #loginNeededSection {
   z-index: 4;
   background-color: rgba(0, 0, 0, 0.5);
-  height: 0;
-  transition: none;
+  height: 100%;
 }
 
 #loginNeededContainer {
@@ -87,10 +86,10 @@ input, textarea {
   top: 0;
   left: 0;
   width: 100%;
-  height: 0%;
+  display: none;
+  height: 100%;
   overflow: hidden;
   background-color: rgba(0, 0, 0, 0.9);
-  transition: all 0.5s;
 }
 
 #comments-section-container {
@@ -112,6 +111,7 @@ input, textarea {
 }
 
 #comments {
+  display: none;
   border-top: 4px solid rgb(0, 78, 121);
   overflow-y: overlay;
   overflow-x: hidden;

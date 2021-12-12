@@ -94,7 +94,9 @@ function validateNewComment(text) {
   }
   return output;
 }
+
 $(document).ready(function() {
+  $('#page').fadeIn();
   var sendDataWorker;
   var checkServerOn = false;
   var checkServerWorker;
@@ -154,7 +156,9 @@ $(document).ready(function() {
     xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function(response) {
       if (this.readyState === 4 && this.status === 200) {
-        location.assign('/microblog/blog');
+        $('#page').fadeOut(() => {
+          location.assign('/microblog/blog');
+        });
       } else if (this.readyState === 4 && this.status === 404) {
         $('#status').text('utente non trovato!');
         $("#status").trigger('open');
@@ -192,9 +196,9 @@ $(document).ready(function() {
       xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function(response) {
         if (this.readyState === 4 && this.status === 201) {
-
-          location.assign('/microblog/blog');
-
+          $('#page').fadeOut(() => {
+            location.assign('/microblog/blog');
+          });
         } else if (this.readyState === 4 && this.status === 400) {
           $('#status').text(JSON.parse(this.responseText).text);
           $("#status").trigger('open');
@@ -218,6 +222,13 @@ $(document).ready(function() {
       $('#status').text(validation.text);
       $("#status").trigger('open');
     }
+  });
+
+  //guest
+  $('#guestButton').on('click', function() {
+    $('#page').fadeOut(() => {
+      location.assign('/microblog/guest');
+    });
   });
 
   //like
@@ -328,10 +339,13 @@ $(document).ready(function() {
     xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function(response) {
       if (this.readyState === 4 && this.status === 200) {
-        $('#comments-section-container').append(this.responseText);
+        $('#comments').empty();
+        $('#comments').append(this.responseText);
         document.getElementById('newCommentPostId').setAttribute('value', postId);
         //apre la sezione commenti del post
-        document.getElementById("commentsSection").style.height = "100%";
+        $('#commentsSection').slideDown('slow', () => {
+          $('#comments').fadeIn(200);
+        });
       } else if (this.readyState === 4 && this.status === 400) {
         $('#status').text('errore');
         $("#status").trigger('open');
