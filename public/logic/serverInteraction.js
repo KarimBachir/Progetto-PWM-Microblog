@@ -107,8 +107,8 @@ $(document).ready(function() {
       sessionStorage.setItem('likes', '[]');
     }
     if (window.Worker) {
-      sendDataWorker = new Worker('/public/logic/sendDataWorker.js');
-      checkServerWorker = new Worker('/public/logic/checkServerWorker.js');
+      sendDataWorker = new Worker('/public/logic/workers/sendDataWorker.js');
+      checkServerWorker = new Worker('/public/logic/workers/checkServerWorker.js');
     } else {
       console.log('worker non disponibile');
     }

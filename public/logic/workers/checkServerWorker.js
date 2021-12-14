@@ -1,13 +1,13 @@
 onmessage = function(e) {
   checkServerStatus();
-}
+};
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function checkServerStatus() {
-  xhttp = new XMLHttpRequest();
+  var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = async function(response) {
     if (this.readyState === 4) {
       if (this.status === 200) {

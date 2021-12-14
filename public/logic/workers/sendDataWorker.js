@@ -8,7 +8,7 @@ async function sendData(likes) {
   var postId;
   //console.log('lunghezza: ' + likes.length);
 
-  xhttp = new XMLHttpRequest();
+  var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function(response) {
     if (this.readyState === 4) {
       if (this.status === 204) {
