@@ -307,10 +307,8 @@ $(document).ready(function() {
       xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function(response) {
         if (this.readyState === 4 && this.status === 201) {
-          //aggiunge il post senza ricaricare la pagina
-          $('#posts').prepend(this.responseText);
           //chiude il form
-          $("#closeNewPostSectionButton").trigger("click");
+          $("#closeNewPostSectionButton").trigger('click', [this.responseText]);
         } else if (this.readyState === 4 && this.status === 400) {
           $('#status').text(JSON.parse(this.responseText).text);
           $("#status").trigger('open');
@@ -368,6 +366,14 @@ $(document).ready(function() {
         if (this.readyState === 4 && this.status === 201) {
           //aggiunge il commento senza ricaricare la pagina
           $("#comments").prepend(this.responseText);
+          if ($('#comments').scrollTop() === 0)
+            $("#comments").children(':first').hide().show(600);
+          else
+            $('#comments').animate({
+              scrollTop: "0"
+            }, 800, () => {
+              $("#comments").children(':first').hide().show(600);
+            });
           //incrementa di 1 il counter dei commenti
           document.getElementById('commentCounter' + postId).innerHTML++;
 

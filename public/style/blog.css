@@ -188,7 +188,6 @@ input, textarea {
   font-size: 60px;
   font-weight: bold;
   color: red;
-  transition: all 0.15s ease;
 }
 
 .post-container {

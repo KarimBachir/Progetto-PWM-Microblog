@@ -6,8 +6,9 @@ function sleep(ms) {
 //se il form di login e il form di signin non sono visibili allora imposta la larghezza della sezione a sinistra della home su 100%
 function checkPage2Content() {
   if ($("#login").css('display') === 'none' && $("#signin").css('display') === 'none') {
-    document.getElementById("status").innerHTML = '';
-    $("#page1").css('width', '100%');
+    $("#page1").animate({
+      width: '100%'
+    }, 600);
   }
 }
 
@@ -46,14 +47,23 @@ $(document).ready(function() {
     $("#status").fadeOut('fast');
     //se la larghezza della sezione a sinistra della home è maggiore del 50% allora la imposta su 50%
     if (parseInt($("#page1").css('width')) > ($(window).width() / 2)) {
-      $("#page1").css('width', '50%');
-      await sleep(600);
-    }
-    //verifica quale dei due pulsanti è stato cliccato
-    if (this.getAttribute('id') === 'triggerLoginFormButton') {
-      toggleForm("signin", "login");
-    } else if (this.getAttribute('id') === 'triggerSigninFormButton') {
-      toggleForm("login", "signin");
+      $("#page1").animate({
+        width: '50%'
+      }, 600, () => {
+        //verifica quale dei due pulsanti è stato cliccato
+        if (this.getAttribute('id') === 'triggerLoginFormButton') {
+          toggleForm("signin", "login");
+        } else if (this.getAttribute('id') === 'triggerSigninFormButton') {
+          toggleForm("login", "signin");
+        }
+      });
+    } else {
+      //verifica quale dei due pulsanti è stato cliccato
+      if (this.getAttribute('id') === 'triggerLoginFormButton') {
+        toggleForm("signin", "login");
+      } else if (this.getAttribute('id') === 'triggerSigninFormButton') {
+        toggleForm("login", "signin");
+      }
     }
   });
 });
