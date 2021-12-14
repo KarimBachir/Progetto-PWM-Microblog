@@ -106,13 +106,16 @@ input, textarea {
   margin-bottom: 2%;
 }
 
+#newCommentForm {
+  border-bottom: 4px solid rgb(0, 78, 121);
+}
+
 #newCommentForm, #comments {
   padding: 0 50px 15px 50px;
 }
 
 #comments {
   display: none;
-  border-top: 4px solid rgb(0, 78, 121);
   overflow-y: overlay;
   overflow-x: hidden;
 }
@@ -126,11 +129,14 @@ input, textarea {
     "b b";
   column-gap: 10px;
   row-gap: 10px;
-  border: 2px solid #dedede;
+  /* non border per evitare lo scatto nell'animazione --> */
+  outline: 2px solid #dedede;
   background-color: #f1f1f1;
   border-radius: 5px;
   padding: 10px;
   margin-top: 15px;
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 .comment-item {
@@ -190,10 +196,14 @@ input, textarea {
   color: red;
 }
 
+#posts {
+  justify-content: center;
+}
+
 .post-container {
   display: grid;
   width: auto;
-  grid-template-columns: 90% auto;
+  grid-template-columns: minmax(0, 1fr) min-content;
   margin-bottom: 3%;
 }
 
@@ -241,11 +251,12 @@ input, textarea {
   background-color: rgb(233, 233, 233);
   display: grid;
   width: auto;
-  grid-template-columns: auto 10%;
+  grid-template-columns: auto auto;
   grid-template-rows: auto auto;
   row-gap: 10px;
-  padding-right: 31px;
-  padding-left: 5px;
+  column-gap: 10px;
+  padding-right: 10px;
+  padding-left: 10px;
 }
 
 .post-iconbar-item {

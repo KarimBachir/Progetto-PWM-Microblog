@@ -32,6 +32,7 @@ button:hover {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   color: white;
+  cursor: pointer;
   padding: 10px;
 }
 
