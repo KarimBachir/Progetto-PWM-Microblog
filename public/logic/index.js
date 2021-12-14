@@ -1,8 +1,3 @@
-//funzione wait
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 //se il form di login e il form di signin non sono visibili allora imposta la larghezza della sezione a sinistra della home su 100%
 function checkPage2Content() {
   if ($("#login").css('display') === 'none' && $("#signin").css('display') === 'none') {

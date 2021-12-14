@@ -143,17 +143,17 @@ $(document).ready(function() {
       sessionStorage.setItem('likes', JSON.stringify(e.data[1]));
       checkServerWorker.postMessage(null);
     }
-  }
+  };
 
   checkServerWorker.onmessage = function(e) {
     checkServerOn = false;
     var likes = JSON.parse(sessionStorage.getItem('likes'));
     sendDataWorker.postMessage(likes);
-  }
+  };
 
   //login
   $('#loginButton').on('click', function() {
-    xhttp = new XMLHttpRequest();
+    var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function(response) {
       if (this.readyState === 4 && this.status === 200) {
         $('#page').fadeOut(() => {
@@ -193,7 +193,7 @@ $(document).ready(function() {
 
     if (validation.result) {
 
-      xhttp = new XMLHttpRequest();
+      var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function(response) {
         if (this.readyState === 4 && this.status === 201) {
           $('#page').fadeOut(() => {
@@ -238,7 +238,7 @@ $(document).ready(function() {
     var address = "/microblog/posts/" + postId + '/likes';
     var likeCounterElement = document.getElementById('likeCounter' + postId);
 
-    xhttp = new XMLHttpRequest();
+    var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function(response) {
 
       if (this.readyState === 4) {
@@ -304,7 +304,7 @@ $(document).ready(function() {
     var validation = validateNewPost(title, text);
 
     if (validation.result) {
-      xhttp = new XMLHttpRequest();
+      var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function(response) {
         if (this.readyState === 4 && this.status === 201) {
           //chiude il form
@@ -334,7 +334,7 @@ $(document).ready(function() {
   //ottiene la lista dei commenti di un post e apre la sezione corrispondente
   $('body').on('click', '.commentImg', function() {
 
-    xhttp = new XMLHttpRequest();
+    var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function(response) {
       if (this.readyState === 4 && this.status === 200) {
         $('#comments').empty();
@@ -361,7 +361,7 @@ $(document).ready(function() {
     var text = $('#newCommentText').val();
     var validation = validateNewComment(text);
     if (validation.result) {
-      xhttp = new XMLHttpRequest();
+      var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function(response) {
         if (this.readyState === 4 && this.status === 201) {
           //aggiunge il commento senza ricaricare la pagina

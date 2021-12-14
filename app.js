@@ -1,5 +1,4 @@
 var express = require('express');
-var mongoose = require('mongoose');
 var handleDB = require('./database/handleDB');
 var cookieParser = require('cookie-parser');
 var app = express();
