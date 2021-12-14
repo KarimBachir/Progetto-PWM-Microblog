@@ -19,9 +19,11 @@ module.exports = function(app) {
   });
 
   mongoose.connection.on('disconnected', function() {
-    console.log('<- Connessione al database persa!');
-    server.close();
-    console.log("#Il server non è piu' in ascolto...");
+    if (server) {
+      console.log('<- Connessione al database persa!');
+      server.close();
+      console.log("#Il server non è piu' in ascolto...");
+    }
   });
 
   mongoose.connect('mongodb://127.0.0.1:27017/microblog',
