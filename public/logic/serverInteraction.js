@@ -365,14 +365,14 @@ $(document).ready(function() {
       xhttp.onreadystatechange = function(response) {
         if (this.readyState === 4 && this.status === 201) {
           //aggiunge il commento senza ricaricare la pagina
-          $("#comments").prepend(this.responseText);
+          $("#comments").prepend(this.responseText).children(':first').hide();
           if ($('#comments').scrollTop() === 0)
-            $("#comments").children(':first').hide().show(600);
+            $("#comments").children(':first').show(600);
           else
             $('#comments').animate({
               scrollTop: "0"
             }, 800, () => {
-              $("#comments").children(':first').hide().show(600);
+              $("#comments").children(':first').show(600);
             });
           //incrementa di 1 il counter dei commenti
           document.getElementById('commentCounter' + postId).innerHTML++;
