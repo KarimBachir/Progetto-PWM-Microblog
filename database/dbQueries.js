@@ -1,5 +1,5 @@
-var userModel = require('../models/userModel');
-var postModel = require('../models/postModel');
+var userModel = require('./models/userModel');
+var postModel = require('./models/postModel');
 
 async function findUserByUsernamePassword(username, password) {
   var output = await userModel.findOne({
