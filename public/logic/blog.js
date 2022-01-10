@@ -42,18 +42,19 @@ $(document).ready(function() {
       //se è stata chiusa la sezione dei commenti
       if ($(this).parent().attr('id') === 'commentsSection') {
         $('#comments').fadeOut('fast');
-      }
-      if (newPost) {
-        //aggiunge il post senza ricaricare la pagina
-        $('#posts').prepend(newPost);
-        if ($('#blog').scrollTop() === 0)
-          $('#posts').children(':first').hide().show(600);
-        else
-          $('#blog').animate({
-            scrollTop: "0"
-          }, 800, () => {
-            $('#posts').children(':first').hide().show(600);
-          });
+      } else {
+        if (newPost) {
+          //aggiunge il post senza ricaricare la pagina
+          $('#posts').prepend(newPost).children(':first').hide();
+          if ($('#blog').scrollTop() === 0)
+            $('#posts').children(':first').show(600);
+          else
+            $('#blog').animate({
+              scrollTop: "0"
+            }, 800, () => {
+              $('#posts').children(':first').show(600);
+            });
+        }
       }
     });
   });
